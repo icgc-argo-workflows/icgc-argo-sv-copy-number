@@ -1,0 +1,9 @@
+{
+    "sample_id"        : "tumour_normal", 
+    "input_tumour_bam" : "input/tumour.GRCh38.bam",
+    "input_tumour_bai" : "input/tumour.GRCh38.bam.bai",
+    "input_normal_bam" : "input/normal.GRCh38.bam",
+    "input_normal_bai" : "input/normal.GRCh38.bam.bai",
+    "expected_output"  : "expected/tumour_normal.svaba.somatic.indel.vcf",
+    "mem" : 1
+}

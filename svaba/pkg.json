@@ -1,0 +1,36 @@
+{
+    "name": "svaba",
+    "version": "0.2.0",
+    "description": "svaba tool",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "svaba",
+        "structural variant caller"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-structural-variation-cn-wg",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "alvinwt",
+            "email": "alvinwtng@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+}
