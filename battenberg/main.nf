@@ -72,7 +72,7 @@ process battenberg {
     """
     mkdir -p output_dir
 
-    run_battenberg.R \
+    ./run_battenberg.R \
       --test > output_dir/battenberg_result.txt
 
     """

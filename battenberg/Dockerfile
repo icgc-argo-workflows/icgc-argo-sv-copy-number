@@ -12,7 +12,7 @@ RUN mkdir /tools/
 ENV PATH="/tools:${PATH}"
 
 COPY run_battenberg.R /tools/
-RUN chmod u+x /tools/test.R
+RUN chmod +x /tools/test.R
 
 RUN git clone https://github.com/kateeasoncrukci/BattenbergHG38.git
 
