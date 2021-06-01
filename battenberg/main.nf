@@ -50,7 +50,7 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
 params.input_file = ""
-params.output_pattern = "*.html"  // output file name pattern
+params.output_pattern = "*_subclones.txt"  // output file name pattern
 
 
 process battenberg {
@@ -72,9 +72,8 @@ process battenberg {
     """
     mkdir -p output_dir
 
-    main.py \
-      -i ${input_file} \
-      -o output_dir
+    run_battenberg.R \
+      --test > output_dir/battenberg_result.txt
 
     """
 }

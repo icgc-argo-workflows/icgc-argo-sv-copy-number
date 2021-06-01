@@ -76,7 +76,6 @@ if(DRY_RUN){
   print(exists(battenberg))
 }
 else {
-
   battenberg(tumourname                  = TUMOURNAME,
              normalname                  = NORMALNAME,
              tumour_data_file            = TUMOURBAM,
