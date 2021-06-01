@@ -18,7 +18,7 @@ RUN git clone https://github.com/kateeasoncrukci/BattenbergHG38.git
 
 RUN R -e "devtools::install_github('Crick-CancerGenomics/ascat/ASCAT@v2.5.2'); BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer', 'gridExtra', 'gtools', 'foreach'))"
 
-RUN R -e "BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer', 'gridExtra', 'gtools', 'foreach'))"
+RUN R -e "BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer', 'gridExtra', 'gtools', 'foreach', 'optparse'))"
 
 RUN R -e "install.packages('BattenbergHG38/BattenbergHG38_2.2.10.tar.gz', repos = NULL, type = 'source')"
 
