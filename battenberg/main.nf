@@ -75,6 +75,10 @@ process battenberg {
     /tools/run_battenberg.R \
       --test TRUE > output_dir/battenberg_result_subclones.txt
 
+      alleleCounter -v >> output_dir/battenberg_result_subclones.txt
+
+      impute2 | grep version >> output_dir/battenberg_result_subclones.txt
+
     """
 }
 
