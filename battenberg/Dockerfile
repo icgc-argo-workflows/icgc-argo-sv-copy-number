@@ -12,11 +12,11 @@ RUN mkdir /tools/
 ENV PATH="/tools:${PATH}"
 
 COPY run_battenberg.R /tools/
-RUN chmod +x /tools/test.R
+RUN chmod +x /tools/run_battenberg.R
 
 RUN git clone https://github.com/kateeasoncrukci/BattenbergHG38.git
 
-RUN R -e "devtools::install_github('Crick-CancerGenomics/ascat/ASCAT@v2.5.2'); BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer', 'gridExtra', 'gtools', 'foreach'))"
+RUN R -e "devtools::install_github('Crick-CancerGenomics/ascat/ASCAT@v2.5.2')"
 
 RUN R -e "BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer', 'gridExtra', 'gtools', 'foreach', 'optparse'))"
 
