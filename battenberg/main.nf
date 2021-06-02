@@ -73,7 +73,7 @@ process battenberg {
     mkdir -p output_dir
 
     /tools/run_battenberg.R \
-      --test TRUE > output_dir/battenberg_result.txt
+      --test TRUE > output_dir/battenberg_result_subclones.txt
 
     """
 }
