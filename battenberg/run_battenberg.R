@@ -65,7 +65,7 @@ MIN_BASE_QUAL         = 20
 MIN_MAP_QUAL          = 35
 CALC_SEG_BAF_OPTION   = 3
 
-Change to work directory and load the chromosome information
+#Change to work directory and load the chromosome information
 if(!file.exists(RUN_DIR)) {
   dir.create(RUN_DIR)
 }
@@ -73,9 +73,8 @@ if(!file.exists(RUN_DIR)) {
 setwd(RUN_DIR)
 
 if(DRY_RUN){
-  print(exists(battenberg))
-}
-else {
+  print(exists("battenberg"))
+} else {
   battenberg(tumourname                  = TUMOURNAME,
              normalname                  = NORMALNAME,
              tumour_data_file            = TUMOURBAM,
