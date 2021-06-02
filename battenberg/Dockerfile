@@ -1,10 +1,10 @@
-FROM quay.io/wtsicgp/dockstore-cgpwgs:2.1.0 as cgpwgs
+#FROM quay.io/wtsicgp/dockstore-cgpwgs:2.1.0 as cgpwgs
 FROM csoriano/snptest:latest as snptest
 FROM bioconductor/bioconductor_docker:RELEASE_3_12
 
 LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
 
-COPY --from=cgpwgs /opt/wtsi-cgp/bin/alleleCounter ./bin
+#COPY --from=cgpwgs /opt/wtsi-cgp/bin/alleleCounter ./bin
 COPY --from=snptest /usr/local/bin/impute2 ./bin
 
 RUN mkdir /tools/
