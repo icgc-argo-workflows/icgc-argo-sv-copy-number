@@ -22,4 +22,4 @@ RUN R -e "BiocManager::install(c('readr', 'doParallel', 'ggplot2', 'RColorBrewer
 
 RUN R -e "install.packages('BattenbergHG38/BattenbergHG38_2.2.10.tar.gz', repos = NULL, type = 'source')"
 
-CMD ["./run_battenberg.R"]
+CMD ["/tools/run_battenberg.R"]
