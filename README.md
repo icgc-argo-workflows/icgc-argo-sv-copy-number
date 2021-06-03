@@ -20,7 +20,7 @@ git clone https://github.com/ICGC-ARGO-Structural-Variation-CN-WG/icgc-argo-sv-c
 ```bash
 wfpm new tool delly
 ```
-<img src="./docs/clone-repo.gif">
+<img src="./docs/new-tool.gif">
 
 Here I've kept most of the defaults. I'm using alpine-linux as a base image, but anything can be used, including an existing Docker image for the tool.
 
