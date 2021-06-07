@@ -51,11 +51,10 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 // tool specific parmas go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
-params.input_tumour_bai = ""
-params.input_normal_bai = ""
-params.dbsnp_file= "tests/reference/dbsnp_indel.vcf"
-params.ref_genome_gz = "tests/reference/GRCh38_hla_decoy_ebv.fa.gz"
-params.output_pattern = "*.html"  // output file name pattern
+params.sample_id        = ""
+params.dbsnp_file       = "tests/reference/af-only-gnomad.pass-only.hg38.INDELS.vcf.gz"
+params.ref_genome_gz    = ""
+params.output_pattern   = "*.html"  // output file name pattern
 
 
 process svaba {
@@ -68,8 +67,6 @@ process svaba {
   input:  // input, make update as needed
     path input_tumour_bam
     path input_normal_bam
-    path input_tumour_bai
-    path input_normal_bai
 
   output:  // output, make update as needed
     path "${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
@@ -81,10 +78,10 @@ process svaba {
     mkdir -p ${params.sample_id}
     /usr/bin/svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
--G ${baseDir}/${params.ref_genome_gz} \
+-G ${params.ref_genome_gz} \
 -p ${params.mem} \
 -a ${params.sample_id} \
--D ${baseDir}/${params.dbsnp_file}
+-D ${params.dbsnp_file}
     """
 }
 
@@ -94,7 +91,6 @@ process svaba {
 workflow {
 svaba(
 params.input_tumour_bam,
-params.input_normal_bam, 
-params.input_tumour_bai,
-params.input_normal_bai)
+params.input_normal_bam
+)
 }

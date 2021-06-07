@@ -50,11 +50,9 @@ params.container = ""
 // tool specific parmas go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
-params.input_tumour_bai = ""
-params.input_normal_bai = ""
 params.expected_output = ""
 
-include { svaba } from '../main'
+include { svaba } from '../main.nf'
 
 
 process file_smart_diff {
@@ -71,7 +69,6 @@ process file_smart_diff {
     """
     # Note: this is only for demo purpose, please write your own 'diff' according to your own needs.
     # in this example, we need to remove date field before comparison eg, <div id="header_filename">Tue 19 Jan 2021<br/>test_rg_3.bam</div>
-    # sed -e 's#"header_filename">.*<br/>test_rg_3.bam#"header_filename"><br/>test_rg_3.bam</div>#'
 
     cat ${output_file} \
       | sed -e '/^##fileDate=[0-9]*/d' > normalized_output
@@ -86,16 +83,12 @@ workflow checker {
   take:
     input_tumour_bam
     input_normal_bam
-    input_tumour_bai
-    input_normal_bai
     expected_output
 
   main:
     svaba(
 	input_tumour_bam,
 	input_normal_bam,
-	input_tumour_bai,
-	input_normal_bai
     )
 
     file_smart_diff(
@@ -109,8 +102,6 @@ workflow {
   checker(
     file(params.input_tumour_bam),
     file(params.input_normal_bam),
-    file(params.input_tumour_bai),
-    file(params.input_normal_bai),
     file(params.expected_output)
   )
 }
