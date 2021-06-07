@@ -79,7 +79,7 @@ process svaba {
 
     """
     mkdir -p ${params.sample_id}
-    svaba run -t ${input_tumour_bam} \
+    /usr/bin/svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
 -G ${baseDir}/${params.ref_genome_gz} \
 -p ${params.mem} \
