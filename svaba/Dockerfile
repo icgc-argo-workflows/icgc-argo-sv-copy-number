@@ -10,7 +10,8 @@ RUN apt-get clean && \
 	build-essential \
 	zlib1g-dev \
 	libbz2-dev \
-	liblzma-dev
+	liblzma-dev \
+	procps
 
 RUN git config --global http.sslVerify false && \
 	# install svaba from github repository
