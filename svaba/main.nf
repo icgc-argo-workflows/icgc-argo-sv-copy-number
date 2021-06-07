@@ -39,10 +39,10 @@ default_container_registry = 'ghcr.io'
 
 
 // universal params go here
-params.container_registry = "docker.io"
-params.container_version = "latest"
-params.container = "alvinwtng/svaba"
-params.workdir = '/scratchb/stlab-icgc/users/ng02/ICGC-ARGO/SVABAEnv/icgc-argo-sv-copy-number/svaba'
+params.container_registry = ""
+params.container_version = ""
+params.container = ""
+params.workdir = ''
 params.cpus = 1
 params.mem = 4  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
