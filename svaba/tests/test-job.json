@@ -5,6 +5,6 @@
     "input_normal_bam" : "input/normal-chr3.GRCh38.bam",
     "input_normal_bai" : "input/normal-chr3.GRCh38.bam.bai",
     "expected_output"  : "expected/tumour_normal.svaba.somatic.indel.vcf",
-    "ref_genome_gz" : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa.gz",
-    "mem" : 4
+    "ref_genome_gz"    : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa",
+    "mem"              : 4
 }
