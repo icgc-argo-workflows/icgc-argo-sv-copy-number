@@ -5,6 +5,6 @@
     "input_normal_bam" : "input/normal.GRCh38.bam",
     "input_normal_bai" : "input/normal.GRCh38.bam.bai",
     "expected_output"  : "expected/tumour_normal.svaba.somatic.indel.vcf",
-    "ref_genome_gz" : "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/reference-genome/GRCh38_hla_decoy_ebv/GRCh38_hla_decoy_ebv.fa.gz"
+    "ref_genome_gz" : "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/reference-genome/GRCh38_hla_decoy_ebv/GRCh38_hla_decoy_ebv.fa.gz",
     "mem" : 4
 }

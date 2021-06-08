@@ -15,7 +15,7 @@ RUN apt-get clean && \
 
 RUN git config --global http.sslVerify false && \
 	# install svaba from github repository
-	git clone --recursive https://github.com/walaj/svaba && \
+	git clone --recursive https://github.com/walaj/svaba --branch 1.1.0 && \
 	cd svaba && \
 	./configure && \
 	make && \
