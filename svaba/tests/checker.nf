@@ -50,7 +50,11 @@ params.container = ""
 // tool specific parmas go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
-params.expected_output = ""
+expected_file = file("expected/expected.somatic.indel.vcf")
+
+input_tumour_bai = file(params.input_tumour_bam + '.bai')
+input_normal_bai = file(params.input_normal_bam + '.bai')
+
 
 include { svaba } from '../main.nf'
 
@@ -70,11 +74,9 @@ process file_smart_diff {
     # Note: this is only for demo purpose, please write your own 'diff' according to your own needs.
     # in this example, we need to remove date field before comparison eg, <div id="header_filename">Tue 19 Jan 2021<br/>test_rg_3.bam</div>
 
-    cat ${output_file} \
-      | sed -e '/^##fileDate=[0-9]*/d' > normalized_output
-
-    diff normalized_output expected_file \
-      && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
+    cat ${output_file} | sed -e '/^##fileDate=[0-9]*/d' > normalized_output
+    diff normalized_output expected.somatic.indel.vcf \
+    && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
     """
 }
 
@@ -89,6 +91,8 @@ workflow checker {
     svaba(
 	input_tumour_bam,
 	input_normal_bam,
+        input_tumour_bai,
+        input_normal_bai
     )
 
     file_smart_diff(
@@ -101,6 +105,6 @@ workflow {
   checker(
     file(params.input_tumour_bam),
     file(params.input_normal_bam),
-    file(params.expected_output)
+    file(expected_file)
   )
 }
