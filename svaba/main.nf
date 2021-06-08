@@ -52,7 +52,7 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
 params.sample_id        = ""
-params.dbsnp_file       = "tests/reference/af-only-gnomad.pass-only.hg38.INDELS.vcf.gz"
+params.dbsnp_file       = "tests/reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf.gz"
 params.ref_genome_gz    = ""
 params.output_pattern   = "*.html"  // output file name pattern
 
@@ -76,7 +76,7 @@ process svaba {
 
     """
     mkdir -p ${params.sample_id}
-    /usr/bin/svaba run -t ${input_tumour_bam} \
+    svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
 -G ${params.ref_genome_gz} \
 -p ${params.mem} \
