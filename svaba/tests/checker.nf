@@ -97,7 +97,6 @@ workflow checker {
     )
 }
 
-
 workflow {
   checker(
     file(params.input_tumour_bam),
