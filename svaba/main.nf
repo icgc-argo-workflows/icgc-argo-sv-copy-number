@@ -47,15 +47,14 @@ params.cpus = 1
 params.mem = 4  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
-
 // tool specific parmas go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
 params.sample_id        = ""
 params.dbsnp_file       = "tests/reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf.gz"
 params.ref_genome_gz    = ""
+params.ref_genome_fai   = file(params.ref_genome_gz + '.fai')
 params.output_pattern   = "*.html"  // output file name pattern
-
 
 process svaba {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
