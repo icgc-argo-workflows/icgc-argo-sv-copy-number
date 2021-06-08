@@ -56,6 +56,9 @@ params.ref_genome_gz    = ""
 params.ref_genome_fai   = file(params.ref_genome_gz + '.fai')
 params.output_pattern   = "*.html"  // output file name pattern
 
+input_tumour_bai = file(params.input_tumour_bam + '.bai')
+input_normal_bai = file(params.input_normal_bam + '.bai')
+
 process svaba {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
   publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
@@ -66,9 +69,11 @@ process svaba {
   input:  // input, make update as needed
     path input_tumour_bam
     path input_normal_bam
+    path input_tumour_bai
+    path input_normal_bai
 
   output:  // output, make update as needed
-    path "${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
+    path "${params.sample_id}/${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
 
   script:
     // add and initialize variables here as needed
@@ -77,10 +82,12 @@ process svaba {
     mkdir -p ${params.sample_id}
     svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
--G ${params.ref_genome_gz} \
+-G ${baseDir}/${params.ref_genome_gz} \
 -p ${params.mem} \
 -a ${params.sample_id} \
--D ${params.dbsnp_file}
+-D ${baseDir}/${params.dbsnp_file}
+
+    mv ${params.sample_id}.* ${params.sample_id}/
     """
 }
 
@@ -90,6 +97,8 @@ process svaba {
 workflow {
 svaba(
 params.input_tumour_bam,
-params.input_normal_bam
+params.input_normal_bam,
+input_tumour_bai,
+input_normal_bai
 )
 }
