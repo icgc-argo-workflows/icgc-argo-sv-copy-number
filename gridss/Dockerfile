@@ -1,11 +1,5 @@
-FROM pegi3s/fastqc:0.11.9
+FROM gridss/gridss:2.12.0
 
 LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
 
-ENV PATH="/tools:${PATH}"
-
-COPY *.py /tools/
-
-ENTRYPOINT ["/usr/bin/env"]
-
-CMD ["/bin/bash"]
+CMD ["/bin/sh"]

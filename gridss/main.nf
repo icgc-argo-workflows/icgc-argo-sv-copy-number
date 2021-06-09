@@ -43,14 +43,21 @@ params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 1
-params.mem = 1  // GB
+params.cpus = 4
+params.mem = 36  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 
-// tool specific parmas go here, add / change as needed
-params.input_file = ""
-params.output_pattern = "*.html"  // output file name pattern
+// tool specific params go here, add / change as needed
+params.tumor_bam = ""
+params.normal_bam = ""
+params.tumor_sample = ""
+params.normal_sample = ""
+params.reference_fasta = ""
+params.output_dir = ""
+params.jvm_heap = 32 // GB
+params.other_jvm_heap = 4 // GB
+params.output_pattern = "*.vcf.gz"  // output file name pattern
 
 
 process gridss {
@@ -61,20 +68,32 @@ process gridss {
   memory "${params.mem} GB"
 
   input:  // input, make update as needed
-    path input_file
+      path tumor_bam
+      path normal_bam
+      path reference_fasta
+      path output_dir
 
   output:  // output, make update as needed
-    path "output_dir/${params.output_pattern}", emit: output_file
+    path "output_dir/${params.tumor_sample}_${params.normal_sample}.gridss.vcf.gz", emit: output_file
 
   script:
     // add and initialize variables here as needed
 
     """
-    mkdir -p output_dir
+    mkdir -p ${output_dir}
+    mkdir -p ${output_dir}/gridss_wdir/
 
-    main.py \
-      -i ${input_file} \
-      -o output_dir
+    gridss \
+    --jvmheap ${params.jvm_heap}G \
+    --otherjvmheap ${params.other_jvm_heap}G \
+    --reference ${reference_fasta} \
+    --output ${output_dir}/${params.tumor_sample}_${params.normal_sample}.gridss.vcf.gz \
+    --assembly ${output_dir}/${params.tumor_sample}_${params.normal_sample}.assembly.bam \
+    --threads ${params.cpus} \
+    --workingdir ${output_dir}/gridss_wdir/ \
+    --labels ${params.tumor_sample},${params.normal_sample} \
+    ${tumor_bam} \
+    ${normal_bam} \
 
     """
 }
@@ -84,6 +103,9 @@ process gridss {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
   gridss(
-    file(params.input_file)
+  file(params.tumor_bam),
+  file(params.normal_bam),
+  file(params.reference_fasta),
+  params.output_dir
   )
 }
