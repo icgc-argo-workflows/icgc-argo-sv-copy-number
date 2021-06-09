@@ -1,11 +1,11 @@
 {
-  "tumor_bam": "/nfs/research/icortes/jespejo/ARGO/mini_tumor/COLO829T_mini.bam"
-  "normal_bam": "/nfs/research/icortes/jespejo/ARGO/mini_tumor/COLO829R_mini.bam"
-  "tumor_sample": "COLO829T"
-  "normal_sample": "COLO829R"
-  "reference_fasta": "/nfs/research/icortes/DATA/hg38/Homo_sapiens_assembly38.fasta"
-  "output_dir": "/nfs/research/icortes/jespejo/ARGO/icgc-argo-sv-copy-number/gridss/tests/test_output"
-  "jvm_heap": 32
-  "other_jvm_heap": 8
-  "output_pattern": "*.vcf.gz"
+  "tumor_bam": "input/COLO829T_mini.bam",
+  "normal_bam": "input/COLO829R_mini.bam",
+  "tumor_sample": "COLO829T",
+  "normal_sample": "COLO829R",
+  "reference_fasta": "/nfs/research/icortes/DATA/hg38/Homo_sapiens_assembly38.fasta",
+  "output_dir": "",
+  "jvm_heap": 32,
+  "other_jvm_heap": 8,
+  "output_pattern": "*.vcf.gz",
 }
