@@ -143,7 +143,7 @@ and script code:
 
 You can test running by generating a `parameters.json` file or passing your input parameters on the command line:
 ```bash
-nextflow -C nextflow.config run main.nf --params-file example-params.json
+nextflow -C nextflow.config run main.nf -params-file example-params.json
 ```
 Where the `example-params.json` contains:
 ```bash
