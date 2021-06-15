@@ -8,6 +8,7 @@ option_list = list(
   make_option(c("-n", "--normalbam"), type="character", default=NULL, help="Normal BAM file", metavar="character"),
   make_option(c("--sex"), type="character", default=NULL, help="Sex of the sample", metavar="character"),
   make_option(c("-r", "--reference"), type="character", default=".", help="Directory where reference files are found", metavar="character"),
+  make_option(c("-i", "--imputeinfofile"), type="character", default=".", help="Impute info file", metavar="character"),
   make_option(c("-o", "--output"), type="character", default=".", help="Directory where output will be written", metavar="character"),
   make_option(c("--tumourname"), type="character", default=NULL, help="Samplename of the tumour", metavar="character"),
   make_option(c("--normalname"), type="character", default=NULL, help="Samplename of the normal", metavar="character"),
@@ -16,7 +17,7 @@ option_list = list(
   make_option(c("--skip_preprocessing"), type="logical", default=FALSE, action="store_true", help="Provide when pre-processing has previously completed. This expects the files on disk", metavar="character"),
   make_option(c("--skip_phasing"), type="logical", default=FALSE, action="store_true", help="Provide when phasing has previously completed. This expects the files on disk", metavar="character"),
   make_option(c("--bp"), type="character", default=NULL, help="Optional two column file (chromosome and position) specifying prior breakpoints to be used during segmentation", metavar="character"),
-  make_option(c("--test"), type="logical", default=FALSE, help="Dry testing run which does not run Battenberg but confirms that the command can be run", metavar="character")
+  make_option(c("--test"), type="logical", default=FALSE, action="store_true", help="Dry testing run which does not run Battenberg but confirms that the command can be run", metavar="character")
   )
 
 opt_parser = OptionParser(option_list=option_list)
@@ -35,10 +36,10 @@ SKIP_PHASING           = opt$skip_phasing
 NTHREADS               = opt$cpu
 PRIOR_BREAKPOINTS_FILE = opt$bp
 DRY_RUN                = opt$test
+IMPUTEINFOFILE         = opt$imputeinfofile
 
 # General static
 G1000PREFIX         = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_allele_index_chr")
-IMPUTEINFOFILE      = paste0(REF_DIR, "/imputation/impute_info.txt")
 G1000PREFIX_AC      = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_loci_chrstring_chr")
 GCCORRECTPREFIX     = paste0(REF_DIR, "/GC_correction_hg38/1000G_GC_chr")
 REPLICCORRECTPREFIX = paste0(REF_DIR, "/RT_correction_hg38/1000G_RT_chr")
@@ -73,8 +74,12 @@ if(!file.exists(RUN_DIR)) {
 setwd(RUN_DIR)
 
 if(DRY_RUN){
+
   print(exists("battenberg"))
+  sapply(ls(), mget, envir = .GlobalEnv)
+
 } else {
+
   battenberg(tumourname                  = TUMOURNAME,
              normalname                  = NORMALNAME,
              tumour_data_file            = TUMOURBAM,
