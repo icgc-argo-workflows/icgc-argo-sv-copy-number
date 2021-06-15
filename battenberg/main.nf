@@ -43,15 +43,21 @@ params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 1
-params.mem = 1  // GB
+params.cpus = 24 // Battenberg only parallelises to as many jobs as there are chromosomes, so the max cpus that is useful is 24
+params.mem = 32  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.tumour_bam = ""
+params.tumour_bam = ""
+params.sex = ""
+params.battenberg_ref_dir = ""
+params.battenberg_impute_info = ""
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
+tumour_bai = file(params.input_tumour_bam + ".bai")
+normal_bai = file(params.input_normal_bam + ".bai")
 
 process battenberg {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -61,7 +67,10 @@ process battenberg {
   memory "${params.mem} GB"
 
   input:  // input, make update as needed
-    path input_file
+    path params.tumour_bam
+    path params.normal_bam
+    path tumour_bai
+    path normal_bai
 
   output:  // output, make update as needed
     path "output_dir/${params.output_pattern}", emit: output_file
@@ -72,12 +81,20 @@ process battenberg {
     """
     mkdir -p output_dir
 
-    /tools/run_battenberg.R \
-      --test TRUE > output_dir/battenberg_result_subclones.txt
+    // /tools/run_battenberg.R \
+    //   --test TRUE > output_dir/battenberg_result_subclones.txt
 
-      alleleCounter -v >> output_dir/battenberg_result_subclones.txt
+    //   alleleCounter -v >> output_dir/battenberg_result_subclones.txt
 
-      impute2 | grep version >> output_dir/battenberg_result_subclones.txt
+    //   impute2 | grep version >> output_dir/battenberg_result_subclones.txt
+
+    Rscript run_battenberg.R \
+    -t ${params.tumour_bam} \
+    -n ${params.normal_bam} \
+    --sex ${params.sex} \
+    -r ${params.battenberg_ref_dir} \
+    -i ${params.battenberg_impute_info}
+    --cpu ${params.cpus} \
 
     """
 }
