@@ -48,8 +48,15 @@ params.container_version = ""
 params.container = ""
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.tumour_bam = ""
+params.normal_bam = ""
+params.sex = ""
+params.battenberg_ref_dir = ""
+params.battenberg_impute_info = ""
 params.expected_output = ""
+
+tumour_bai = file(params.tumour_bam + ".bai")
+normal_bai = file(params.normal_bam + ".bai")
 
 include { battenberg } from '../main'
 
@@ -84,12 +91,16 @@ process file_smart_diff {
 
 workflow checker {
   take:
-    input_file
+    tumour_bam
+    normal_bam
     expected_output
 
   main:
     battenberg(
-      input_file
+      tumour_bam,
+      normal_bam,
+      tumour_bai,
+      normal_bai
     )
 
     file_smart_diff(
@@ -101,7 +112,8 @@ workflow checker {
 
 workflow {
   checker(
-    file(params.input_file),
+    file(params.tumour_bam),
+    file(params.normal_bam),
     file(params.expected_output)
   )
 }

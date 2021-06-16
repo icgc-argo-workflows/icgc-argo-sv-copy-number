@@ -1,5 +1,9 @@
 {
-    "input_file": "input/test_rg_3.bam",
+    "tumour_bam": "input/test_rg_3.bam",
+    "normal_bam": "input/test_rg_3_norm.bam",
+    "sex": "female",
+    "battenberg_ref_dir": "/home/eason01/dockertest/battenberg_references",
+    "battenberg_impute_info": "tests/impute_info.txt",
     "expected_output": "expected/battenberg_test.txt",
     "publish_dir": "outdir",
     "cpus": 1,

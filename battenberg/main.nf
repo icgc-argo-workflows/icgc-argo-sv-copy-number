@@ -50,14 +50,14 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
 params.tumour_bam = ""
-params.tumour_bam = ""
+params.normal_bam = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
 params.battenberg_impute_info = ""
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
-tumour_bai = file(params.input_tumour_bam + ".bai")
-normal_bai = file(params.input_normal_bam + ".bai")
+tumour_bai = file(params.tumour_bam + ".bai")
+normal_bai = file(params.normal_bam + ".bai")
 
 process battenberg {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -81,20 +81,21 @@ process battenberg {
     """
     mkdir -p output_dir
 
-    // /tools/run_battenberg.R \
-    //   --test TRUE > output_dir/battenberg_result_subclones.txt
+    # /tools/run_battenberg.R \
+    #   --test TRUE > output_dir/battenberg_result_subclones.txt
 
-    //   alleleCounter -v >> output_dir/battenberg_result_subclones.txt
+    #   alleleCounter -v >> output_dir/battenberg_result_subclones.txt
 
-    //   impute2 | grep version >> output_dir/battenberg_result_subclones.txt
+    #   impute2 | grep version >> output_dir/battenberg_result_subclones.txt
 
-    Rscript run_battenberg.R \
-    -t ${params.tumour_bam} \
-    -n ${params.normal_bam} \
-    --sex ${params.sex} \
-    -r ${params.battenberg_ref_dir} \
-    -i ${params.battenberg_impute_info}
-    --cpu ${params.cpus} \
+    /tools/run_battenberg.R -h \
+    #-t ${params.tumour_bam} \
+    #-n ${params.normal_bam} \
+    #--sex ${params.sex} \
+    #-r ${params.battenberg_ref_dir} \
+    #--imputeinfofile ${params.battenberg_impute_info} \
+    #--cpu ${params.cpus} \
+    #--test
 
     """
 }
