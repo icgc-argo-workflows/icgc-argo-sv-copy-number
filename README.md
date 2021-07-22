@@ -165,6 +165,7 @@ docker build . -t ghcr.io/icgc-argo-structural-variation-cn-wg/wfpm-demo.delly:0
 ```
 
 Now you will be able to run your tool using the `nextflow run` command above.
+You should always test your tool from another location to avoid populating your repo with intermediate nextflow files and foldes (some are hidden), and test results. You can also include the option `-with-report` to your `nextflow run` command, which will generate an `html` report with resource usage summary. This will help you chose sensible resource requirements for your tool.
 
 ### 6. Push Branch
 
