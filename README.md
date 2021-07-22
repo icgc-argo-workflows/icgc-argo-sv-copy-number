@@ -111,7 +111,7 @@ The `--rm` flag means that you don't want to keep the container around after you
 
 <img src="./docs/build-image.gif">
 
-### 4. Use the tool in Nextflow
+### 5. Use the tool in Nextflow
 
 The `main.nf` file within your tool directory should now be able to use your tool. You can edit it to change the parameters:
 ```groovy
@@ -141,7 +141,7 @@ and script code:
      """
 ```
 
-You can test running by generating a `parameters.json` file or passing your input parameters on the command line:
+You can test running by generating a `parameters.json` file or passing your input parameters on the command line (you will likely get an error, continue reading):
 ```bash
 nextflow -C nextflow.config run main.nf -params-file example-params.json
 ```
@@ -158,6 +158,14 @@ Where the `example-params.json` contains:
 }
 ```
 
+When running your module for the first time, nextflow will complain that the image `ghcr.io/icgc-argo-structural-variation-cn-wg/wfpm-demo.<tool>:<version>` is not found. This is because you have not yet pushed and merged your code (see below) and the docker image is not yet available at `ghcr.io`. A neat workaround is to build a local docker image with the exact name that nextflow is looking for (defined in your `main.nf`, and stated in the error message). Go to your tool directory and run:
+```bash
+# adjust the name according to your tool and version!
+docker build . -t ghcr.io/icgc-argo-structural-variation-cn-wg/wfpm-demo.delly:0.1.0
+```
+
+Now you will be able to run your tool using the `nextflow run` command above.
+
 ### 6. Push Branch
 
 Once the tool is working and installed, you can push your tool branch via:
@@ -169,13 +177,13 @@ git push -u origin <tool-name>@<version-number>
 
 GitHub will attempt to run tests when you push your branch, and they will almost certainly fail since they haven't been written yet. This is ok though because the branch is still a WIP.
 
-### 6. Write Tests
+### 7. Write Tests
 
 Within the `tests/` directory, you can edit the `checker.nf` and `test-job-<N>.json` files to create a minimal test of the tool. You can create as many tests as you want, by creating incremental `test-job-<N>.json` files.
 
-To test locally you can run `wfpm test` (N.B. this requires you to have pushed the code first).
+To test locally you can run `wfpm test` (you have to have the corresponding local image as described at the end of section **5** if you still have not pushed your code).
 
-### 7. Publish tool
+### 8. Publish tool
 
 Once you're satisfied with your tests and they pass successfully, you can open a pull request (PR) with your branch. Keep the default title, but enter `[release]` as the PR body.
 
