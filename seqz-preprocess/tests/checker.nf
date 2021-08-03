@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 /*
-  Copyright (c) 2021, ICGC-ARGO-Structural-Variation-CN-WG
+  Copyright (c) 2021, ICGC ARGO
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
   SOFTWARE.
 
   Authors:
-    lDesiree
+    Desiree Schnidrig
 */
 
 /*
@@ -37,7 +37,7 @@ nextflow.enable.dsl = 2
 version = '0.2.0'  // package version
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.seqz-preprocess'
+    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/wfpm-demo.seqz-preprocess'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/
@@ -48,7 +48,10 @@ params.container_version = ""
 params.container = ""
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.tumor_bam      = ""
+params.normal_bam     = ""
+params.gcwiggle       = ""
+params.fasta           = ""
 params.expected_output = ""
 
 include { seqzPreprocess } from '../main'
@@ -58,7 +61,7 @@ process file_smart_diff {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
 
   input:
-    path output_file
+    path seqz
     path expected_file
 
   output:
@@ -66,17 +69,7 @@ process file_smart_diff {
 
   script:
     """
-    # Note: this is only for demo purpose, please write your own 'diff' according to your own needs.
-    # in this example, we need to remove date field before comparison eg, <div id="header_filename">Tue 19 Jan 2021<br/>test_rg_3.bam</div>
-    # sed -e 's#"header_filename">.*<br/>test_rg_3.bam#"header_filename"><br/>test_rg_3.bam</div>#'
-
-    cat ${output_file} \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_output
-
-    ([[ '${expected_file}' == *.gz ]] && gunzip -c ${expected_file} || cat ${expected_file}) \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_expected
-
-    diff normalized_output normalized_expected \
+    zdiff ${seqz} ${expected_file} \
       && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
     """
 }
@@ -84,16 +77,22 @@ process file_smart_diff {
 
 workflow checker {
   take:
-    input_file
+    tumor_bam
+    normal_bam
+    gcwiggle
+    fasta
     expected_output
 
   main:
     seqzPreprocess(
-      input_file
+      tumor_bam,
+      normal_bam,
+      gcwiggle,
+      fasta
     )
 
     file_smart_diff(
-      seqzPreprocess.out.output_file,
+      seqzPreprocess.out.seqz,
       expected_output
     )
 }
@@ -101,7 +100,10 @@ workflow checker {
 
 workflow {
   checker(
-    file(params.input_file),
+    file(params.tumor_bam),
+    file(params.normal_bam),
+    file(params.fasta),
+    file(params.gcwiggle),
     file(params.expected_output)
   )
 }
