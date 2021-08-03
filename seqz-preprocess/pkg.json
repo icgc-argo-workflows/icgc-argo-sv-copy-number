@@ -1,7 +1,7 @@
 {
-    "name": "seqz-main",
+    "name": "seqz-preprocess",
     "version": "0.2.0",
-    "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
+    "description": "Sequenza preprocessing",
     "main": "main.nf",
     "deprecated": false,
     "keywords": [
@@ -34,3 +34,4 @@
     "license": "MIT",
     "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
     "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+}
