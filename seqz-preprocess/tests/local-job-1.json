@@ -1,0 +1,9 @@
+{
+    "tumor_bam": "input/tumorBAM/8f879c15-14da-593d-bb76-db866f81ab3a.6.20190927.wgs.grch38.bam",
+    "normal_bam": "input/normalBAM/cfa409d0-3236-5f07-8634-a2c0de74c8f2.5.20190927.wgs.grch38.bam",
+    "gcwiggle": "../resources/hg38.gc50Base.wig.gz",
+    "fasta": "input/tiny-grch38-chr11-530001-537000.fa",
+    "expected_output": "expected/expected_bin50.seqz.gz",
+    "cpus": 1,
+    "mem": 0.5
+}
