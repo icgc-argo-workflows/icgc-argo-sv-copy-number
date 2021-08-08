@@ -1,0 +1,8 @@
+{
+    "tumor_bam": "/path/to/tumor.bam",
+    "normal_bam": "/path/to/normal.bam",
+    "gcwiggle": "/path/to/seqz-main-tool/resources/hg38.gc50Base.wig.gz",
+    "fasta": "/path/to/fasta",
+    "cpus": 4,
+    "mem": 36
+}
