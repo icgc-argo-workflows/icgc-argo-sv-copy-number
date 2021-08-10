@@ -42,8 +42,8 @@ params.normal_bam     = ""
 params.gcwiggle       = ""
 params.fasta          = ""
 
-include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/wfpm-demo/seqz-preprocess@0.2.0/main.nf' params([*:params, 'cleanup': false])
-include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/wfpm-demo/seqz-main@0.3.0/main.nf' params([*:params, 'cleanup': false])
+include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.0/main.nf' params([*:params, 'cleanup': false])
+include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.0/main.nf' params([*:params, 'cleanup': false])
 
 
 // please update workflow code as needed
