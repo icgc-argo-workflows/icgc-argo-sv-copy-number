@@ -164,7 +164,8 @@ When running your module for the first time, nextflow will complain that the ima
 docker build . -t ghcr.io/icgc-argo-structural-variation-cn-wg/wfpm-demo.delly:0.1.0
 ```
 
-Now you will be able to run your tool using the `nextflow run` command above.
+Now you will be able to run your tool using the `nextflow run` command above. Remember, don't forget to rebuild the docker image every time you make changes to the scripts that get incorporated in the image (`main.py` etc.)!
+
 You should always test your tool from another location to avoid populating your repo with intermediate nextflow files and folders (some are hidden), and test results. You can also include the option `-with-report` to your `nextflow run` command, which will generate an `html` report with resource usage summary. This will help you chose sensible resource requirements for your tool.
 
 ### 6. Push Branch
