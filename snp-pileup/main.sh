@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bash -eu
+#!/bin/bash -ue
 
 # This script runs snp-pileup. It's meant to deal with cram input, so the ref fasta is required (bam will work as well).
 
