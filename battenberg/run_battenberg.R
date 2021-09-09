@@ -75,6 +75,10 @@ if(!file.exists(RUN_DIR)) {
 
 setwd(RUN_DIR)
 
+if(TESTING){
+  message('**** Testing mode active. Results will not be accurate. ****')
+}
+
 battenberg(tumourname                  = TUMOURNAME,
  normalname                  = NORMALNAME,
  tumour_data_file            = TUMOURBAM,
