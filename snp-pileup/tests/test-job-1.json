@@ -1,6 +1,9 @@
 {
-    "input_file": "input/test_rg_3.bam",
-    "expected_output": "expected/expected.test_rg_3.bam",
+    "tumor": "input/test_T.cram",
+    "normal": "input/test_N.cram",
+    "ref": "input/test.fasta.gz",
+    "dbsnp": "input/test.dbsnp.vcf.gz",
+    "expected_output": "expected/expected.bc.gz",
     "publish_dir": "outdir",
     "cpus": 1,
     "mem": 0.5
