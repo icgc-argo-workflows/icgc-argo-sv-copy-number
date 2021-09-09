@@ -43,21 +43,22 @@ params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 24 // Battenberg only parallelises to as many jobs as there are chromosomes, so the max cpus that is useful is 24
-params.mem = 32  // GB
+params.cpus = 1 // Battenberg only parallelises to as many jobs as there are chromosomes, so the max cpus that is useful is 24
+params.mem = 16  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 
 // tool specific parmas go here, add / change as needed
 params.tumour_bam = ""
+params.tumour_bai = ""
 params.normal_bam = ""
+params.normal_bai = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
 params.battenberg_impute_info = ""
+params.testing = false
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
-tumour_bai = file(params.tumour_bam + ".bai")
-normal_bai = file(params.normal_bam + ".bai")
 
 process battenberg {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -68,36 +69,51 @@ process battenberg {
 
   input:  // input, make update as needed
     path params.tumour_bam
+    path params.tumour_bai
     path params.normal_bam
-    path tumour_bai
-    path normal_bai
+    path params.normal_bai
+    path params.battenberg_ref_dir
+    path params.battenberg_impute_info
 
   output:  // output, make update as needed
     path "output_dir/${params.output_pattern}", emit: output_file
 
   script:
+
     // add and initialize variables here as needed
 
-    """
-    mkdir -p output_dir
+    if( params.testing )
 
-    # /tools/run_battenberg.R \
-    #   --test TRUE > output_dir/battenberg_result_subclones.txt
+      """
+      mkdir -p output_dir
+      
+      run_battenberg.R \
+      -t ${params.tumour_bam} \
+      -n ${params.normal_bam} \
+      --sex ${params.sex} \
+      -r ${params.battenberg_ref_dir} \
+      --imputeinfofile ${params.battenberg_impute_info} \
+      -o output_dir \
+      --cpu ${params.cpus} \
+      --test
+      
+      """
 
-    #   alleleCounter -v >> output_dir/battenberg_result_subclones.txt
+    else
 
-    #   impute2 | grep version >> output_dir/battenberg_result_subclones.txt
-
-    /tools/run_battenberg.R -h \
-    #-t ${params.tumour_bam} \
-    #-n ${params.normal_bam} \
-    #--sex ${params.sex} \
-    #-r ${params.battenberg_ref_dir} \
-    #--imputeinfofile ${params.battenberg_impute_info} \
-    #--cpu ${params.cpus} \
-    #--test
-
-    """
+      """
+      mkdir -p output_dir
+      
+      run_battenberg.R \
+      -t ${params.tumour_bam} \
+      -n ${params.normal_bam} \
+      --sex ${params.sex} \
+      -r ${params.battenberg_ref_dir} \
+      --imputeinfofile ${params.battenberg_impute_info} \
+      -o output_dir \
+      --cpu ${params.cpus}
+      
+      """
 }
 
 
@@ -105,6 +121,11 @@ process battenberg {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
   battenberg(
-    file(params.input_file)
+    file(params.tumour_bam),
+    file(params.tumour_bai),
+    file(params.normal_bam),
+    file(params.normal_bai),
+    file(params.battenberg_ref_dir),
+    file(params.battenberg_impute_info),
   )
 }

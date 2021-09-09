@@ -17,37 +17,39 @@ option_list = list(
   make_option(c("--skip_preprocessing"), type="logical", default=FALSE, action="store_true", help="Provide when pre-processing has previously completed. This expects the files on disk", metavar="character"),
   make_option(c("--skip_phasing"), type="logical", default=FALSE, action="store_true", help="Provide when phasing has previously completed. This expects the files on disk", metavar="character"),
   make_option(c("--bp"), type="character", default=NULL, help="Optional two column file (chromosome and position) specifying prior breakpoints to be used during segmentation", metavar="character"),
-  make_option(c("--test"), type="logical", default=FALSE, action="store_true", help="Dry testing run which does not run Battenberg but confirms that the command can be run", metavar="character")
+  make_option(c("--test"), type="logical", default=FALSE, action="store_true", help="Testing run which adds some fake data to allow enough data for Battenberg to run on small test files", metavar="character")
   )
 
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
-TUMOURBAM              = opt$t
-NORMALBAM              = opt$n
+CUR_DIR = getwd()
+
+TUMOURBAM              = paste0(CUR_DIR, "/", opt$tumourbam)
+NORMALBAM              = paste0(CUR_DIR, "/", opt$normalbam)
 IS.MALE                = opt$sex=="male" | opt$sex=="Male" | opt$sex=="m" | opt$sex=="M"
 RUN_DIR                = opt$output
-REF_DIR                = opt$r
-TUMOURNAME             = ifelse( !is.null(opt$tumourname), opt$tumourname, gsub(".bam", "", opt$tb) )
-NORMALNAME             = ifelse( !is.null(opt$normalname), opt$normalname, gsub(".bam", "", opt$nb) )
+REF_DIR                = paste0(CUR_DIR, "/", opt$r)
+TUMOURNAME             = ifelse( !is.null(opt$tumourname), opt$tumourname, gsub(".bam", "", basename(opt$tumourbam)) )
+NORMALNAME             = ifelse( !is.null(opt$normalname), opt$normalname, gsub(".bam", "", basename(opt$normalbam)) )
 SKIP_ALLELECOUNTING    = opt$skip_allelecount
 SKIP_PREPROCESSING     = opt$skip_preprocessing
 SKIP_PHASING           = opt$skip_phasing
 NTHREADS               = opt$cpu
 PRIOR_BREAKPOINTS_FILE = opt$bp
-DRY_RUN                = opt$test
-IMPUTEINFOFILE         = opt$imputeinfofile
+TESTING                = opt$test
+IMPUTEINFOFILE         = paste0(CUR_DIR, "/", opt$imputeinfofile)
 
 # General static
-G1000PREFIX         = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_allele_index_chr")
-G1000PREFIX_AC      = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_loci_chrstring_chr")
-GCCORRECTPREFIX     = paste0(REF_DIR, "/GC_correction_hg38/1000G_GC_chr")
-REPLICCORRECTPREFIX = paste0(REF_DIR, "/RT_correction_hg38/1000G_RT_chr")
+G1000PREFIX         = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_allele_index_")
+G1000PREFIX_AC      = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_loci_chrstring_")
+GCCORRECTPREFIX     = paste0(REF_DIR, "/GC_correction_hg38/1000G_GC_")
+REPLICCORRECTPREFIX = paste0(REF_DIR, "/RT_correction_hg38/1000G_RT_")
 IMPUTE_EXE          = "impute2"
 
 # WGS specific static
 ALLELECOUNTER = "alleleCounter"
-PROBLEMLOCI   = paste0(REF_DIR, "probloci.txt.gz")
+PROBLEMLOCI   = paste0(REF_DIR, "/probloci.txt.gz")
 
 PLATFORM_GAMMA        = 1
 PHASING_GAMMA         = 1
@@ -73,46 +75,39 @@ if(!file.exists(RUN_DIR)) {
 
 setwd(RUN_DIR)
 
-if(DRY_RUN){
-
-  print(exists("battenberg"))
-  sapply(ls(), mget, envir = .GlobalEnv)
-
-} else {
-
-  battenberg(tumourname                  = TUMOURNAME,
-             normalname                  = NORMALNAME,
-             tumour_data_file            = TUMOURBAM,
-             normal_data_file            = NORMALBAM,
-             ismale                      = IS.MALE,
-             imputeinfofile              = IMPUTEINFOFILE,
-             g1000prefix                 = G1000PREFIX,
-             g1000allelesprefix          = G1000PREFIX_AC,
-             gccorrectprefix             = GCCORRECTPREFIX,
-             repliccorrectprefix         = REPLICCORRECTPREFIX,
-             problemloci                 = PROBLEMLOCI,
-             data_type                   = "wgs",
-             impute_exe                  = IMPUTE_EXE,
-             allelecounter_exe           = ALLELECOUNTER,
-             nthreads                    = NTHREADS,
-             platform_gamma              = PLATFORM_GAMMA,
-             phasing_gamma               = PHASING_GAMMA,
-             segmentation_gamma          = SEGMENTATION_GAMMA,
-             segmentation_kmin           = SEGMENTATIIN_KMIN,
-             phasing_kmin                = PHASING_KMIN,
-             clonality_dist_metric       = CLONALITY_DIST_METRIC,
-             ascat_dist_metric           = ASCAT_DIST_METRIC,
-             min_ploidy                  = MIN_PLOIDY,
-             max_ploidy                  = MAX_PLOIDY,
-             min_rho                     = MIN_RHO,
-             min_goodness                = MIN_GOODNESS_OF_FIT,
-             uninformative_BAF_threshold = BALANCED_THRESHOLD,
-             min_normal_depth            = MIN_NORMAL_DEPTH,
-             min_base_qual               = MIN_BASE_QUAL,
-             min_map_qual                = MIN_MAP_QUAL,
-             calc_seg_baf_option         = CALC_SEG_BAF_OPTION,
-             skip_allele_counting        = SKIP_ALLELECOUNTING,
-             skip_preprocessing          = SKIP_PREPROCESSING,
-             skip_phasing                = SKIP_PHASING,
-             prior_breakpoints_file      = PRIOR_BREAKPOINTS_FILE)
-}
+battenberg(tumourname                  = TUMOURNAME,
+ normalname                  = NORMALNAME,
+ tumour_data_file            = TUMOURBAM,
+ normal_data_file            = NORMALBAM,
+ ismale                      = IS.MALE,
+ imputeinfofile              = IMPUTEINFOFILE,
+ g1000prefix                 = G1000PREFIX,
+ g1000allelesprefix          = G1000PREFIX_AC,
+ gccorrectprefix             = GCCORRECTPREFIX,
+ repliccorrectprefix         = REPLICCORRECTPREFIX,
+ problemloci                 = PROBLEMLOCI,
+ data_type                   = "wgs",
+ impute_exe                  = IMPUTE_EXE,
+ allelecounter_exe           = ALLELECOUNTER,
+ nthreads                    = NTHREADS,
+ platform_gamma              = PLATFORM_GAMMA,
+ phasing_gamma               = PHASING_GAMMA,
+ segmentation_gamma          = SEGMENTATION_GAMMA,
+ segmentation_kmin           = SEGMENTATIIN_KMIN,
+ phasing_kmin                = PHASING_KMIN,
+ clonality_dist_metric       = CLONALITY_DIST_METRIC,
+ ascat_dist_metric           = ASCAT_DIST_METRIC,
+ min_ploidy                  = MIN_PLOIDY,
+ max_ploidy                  = MAX_PLOIDY,
+ min_rho                     = MIN_RHO,
+ min_goodness                = MIN_GOODNESS_OF_FIT,
+ uninformative_BAF_threshold = BALANCED_THRESHOLD,
+ min_normal_depth            = MIN_NORMAL_DEPTH,
+ min_base_qual               = MIN_BASE_QUAL,
+ min_map_qual                = MIN_MAP_QUAL,
+ calc_seg_baf_option         = CALC_SEG_BAF_OPTION,
+ skip_allele_counting        = SKIP_ALLELECOUNTING,
+ skip_preprocessing          = SKIP_PREPROCESSING,
+ skip_phasing                = SKIP_PHASING,
+ prior_breakpoints_file      = PRIOR_BREAKPOINTS_FILE,
+ testingKE                   = TESTING)
