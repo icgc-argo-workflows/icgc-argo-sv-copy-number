@@ -85,6 +85,8 @@ process battenberg {
     if( params.testing )
 
       """
+      sed -i 's:REF_DIR:'"\$PWD"':g' tests/input/impute_info_chr11_test.txt
+
       mkdir -p output_dir
       
       run_battenberg.R \
@@ -102,6 +104,8 @@ process battenberg {
     else
 
       """
+      sed -i 's:REF_DIR:'"\$PWD"':g' tests/input/impute_info_chr11_test.txt
+
       mkdir -p output_dir
       
       run_battenberg.R \
