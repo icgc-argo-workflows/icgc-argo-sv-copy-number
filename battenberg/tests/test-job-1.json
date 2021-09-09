@@ -9,6 +9,6 @@
     "expected_output": "expected/expected.8f879c15-14da-593d-bb76-db866f81ab3a.6.20190927.wgs.grch38_subclones.txt",
     "publish_dir": "outdir",
     "cpus": 1,
-    "mem": 24,
+    "mem": 6,
     "testing" : true
 }
