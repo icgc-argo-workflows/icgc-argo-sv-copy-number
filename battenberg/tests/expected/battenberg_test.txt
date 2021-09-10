@@ -1,3 +1,0 @@
-[1] TRUE
-4.2.1
- IMPUTE version 2.3.2 
