@@ -1,0 +1,8 @@
+{
+    "seqz": "input/example.seqz.txt.gz",
+    "runscript": "../scripts/runSequenza.R",
+    "expected_output": "expected/expected-example_segments.txt",
+    "publish_dir": "outdir",
+    "cpus": 1,
+    "mem": 0.5
+}
