@@ -9,5 +9,5 @@
     "publish_dir": "outdir",
     "cpus": 1,
     "mem": 6,
-    "testing" : true
+    "test" : true
 }
