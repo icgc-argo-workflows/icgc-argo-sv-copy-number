@@ -55,8 +55,7 @@ params.normal_bam = ""
 params.normal_bai = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
-params.battenberg_impute_info = ""
-params.testing = false
+params.test = false
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
 
@@ -73,20 +72,17 @@ process battenberg {
     path params.normal_bam
     path params.normal_bai
     path params.battenberg_ref_dir
-    path params.battenberg_impute_info
 
   output:  // output, make update as needed
-    path "output_dir/${params.output_pattern}", emit: output_file
+    path "${params.output_pattern}", emit: output_file
 
   script:
 
     // add and initialize variables here as needed
 
-    if( params.testing )
+    if( params.test )
 
       """
-      sed -i 's:REF_DIR:'"\$PWD"':g' "\$PWD/${params.battenberg_impute_info}"
-
       mkdir -p output_dir
       
       run_battenberg.R \
@@ -94,8 +90,7 @@ process battenberg {
       -n ${params.normal_bam} \
       --sex ${params.sex} \
       -r ${params.battenberg_ref_dir} \
-      --imputeinfofile ${params.battenberg_impute_info} \
-      -o output_dir \
+      --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
       --cpu ${params.cpus} \
       --test
       
@@ -104,8 +99,6 @@ process battenberg {
     else
 
       """
-      sed -i 's:REF_DIR:'"\$PWD"':g' "\$PWD/${params.battenberg_impute_info}"
-
       mkdir -p output_dir
       
       run_battenberg.R \
@@ -113,8 +106,7 @@ process battenberg {
       -n ${params.normal_bam} \
       --sex ${params.sex} \
       -r ${params.battenberg_ref_dir} \
-      --imputeinfofile ${params.battenberg_impute_info} \
-      -o output_dir \
+      --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
       --cpu ${params.cpus}
       
       """
@@ -130,6 +122,5 @@ workflow {
     file(params.normal_bam),
     file(params.normal_bai),
     file(params.battenberg_ref_dir),
-    file(params.battenberg_impute_info),
   )
 }

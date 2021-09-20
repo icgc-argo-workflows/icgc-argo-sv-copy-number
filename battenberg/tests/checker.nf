@@ -54,7 +54,6 @@ params.normal_bam = ""
 params.normal_bai = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
-params.battenberg_impute_info = ""
 params.expected_output = ""
 
 
@@ -86,7 +85,6 @@ workflow checker {
     normal_bam
     normal_bai
     battenberg_ref_dir
-    battenberg_impute_info
     expected_output
 
   main:
@@ -96,7 +94,6 @@ workflow checker {
       normal_bam,
       normal_bai,
       battenberg_ref_dir,
-      battenberg_impute_info
     )
 
     file_smart_diff(
@@ -113,7 +110,6 @@ workflow {
     file(params.normal_bam),
     file(params.normal_bai),
     file(params.battenberg_ref_dir),
-    file(params.battenberg_impute_info),
     file(params.expected_output)
   )
 }

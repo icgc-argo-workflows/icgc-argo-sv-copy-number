@@ -9,7 +9,6 @@ option_list = list(
   make_option(c("--sex"), type="character", default=NULL, help="Sex of the sample", metavar="character"),
   make_option(c("-r", "--reference"), type="character", default=".", help="Directory where reference files are found", metavar="character"),
   make_option(c("-i", "--imputeinfofile"), type="character", default=".", help="Impute info file", metavar="character"),
-  make_option(c("-o", "--output"), type="character", default=".", help="Directory where output will be written", metavar="character"),
   make_option(c("--tumourname"), type="character", default=NULL, help="Samplename of the tumour", metavar="character"),
   make_option(c("--normalname"), type="character", default=NULL, help="Samplename of the normal", metavar="character"),
   make_option(c("--cpu"), type="numeric", default=1, help="The number of CPU cores to be used by the pipeline (Default: 8)", metavar="character"),
@@ -23,13 +22,10 @@ option_list = list(
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
-CUR_DIR = getwd()
-
-TUMOURBAM              = paste0(CUR_DIR, "/", opt$tumourbam)
-NORMALBAM              = paste0(CUR_DIR, "/", opt$normalbam)
+TUMOURBAM              = opt$tumourbam
+NORMALBAM              = opt$normalbam
 IS.MALE                = opt$sex=="male" | opt$sex=="Male" | opt$sex=="m" | opt$sex=="M"
-RUN_DIR                = opt$output
-REF_DIR                = paste0(CUR_DIR, "/", opt$r)
+REF_DIR                = opt$r
 TUMOURNAME             = ifelse( !is.null(opt$tumourname), opt$tumourname, gsub(".bam", "", basename(opt$tumourbam)) )
 NORMALNAME             = ifelse( !is.null(opt$normalname), opt$normalname, gsub(".bam", "", basename(opt$normalbam)) )
 SKIP_ALLELECOUNTING    = opt$skip_allelecount
@@ -38,7 +34,7 @@ SKIP_PHASING           = opt$skip_phasing
 NTHREADS               = opt$cpu
 PRIOR_BREAKPOINTS_FILE = opt$bp
 TESTING                = opt$test
-IMPUTEINFOFILE         = paste0(CUR_DIR, "/", opt$imputeinfofile)
+IMPUTEINFOFILE         = opt$imputeinfofile
 
 # General static
 G1000PREFIX         = paste0(REF_DIR, "/1000G_loci_hg38/1kg.phase3.v5a_GRCh38nounref_allele_index_")
@@ -67,13 +63,6 @@ MIN_NORMAL_DEPTH      = 10
 MIN_BASE_QUAL         = 20
 MIN_MAP_QUAL          = 35
 CALC_SEG_BAF_OPTION   = 3
-
-#Change to work directory and load the chromosome information
-if(!file.exists(RUN_DIR)) {
-  dir.create(RUN_DIR)
-}
-
-setwd(RUN_DIR)
 
 if(TESTING){
   message('**** Testing mode active. Results will not be accurate. ****')
