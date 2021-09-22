@@ -1,7 +1,9 @@
 {
-    "input_file": "input/test_rg_3.bam",
-    "expected_output": "expected/expected.test_rg_3.bam",
+    "pileup": "input/test.bc.gz",
+    "tumor_id": "test",
+    "genome": "hg19",
+    "expected_output": "expected/expected.out",
     "publish_dir": "outdir",
     "cpus": 1,
-    "mem": 0.5
+    "mem": 1
 }
