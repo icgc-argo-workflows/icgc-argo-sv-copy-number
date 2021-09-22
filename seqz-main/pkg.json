@@ -1,6 +1,6 @@
 {
     "name": "seqz-main",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
     "main": "main.nf",
     "deprecated": false,
