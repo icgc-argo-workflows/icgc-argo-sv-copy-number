@@ -70,13 +70,15 @@ process seqzPreprocess {
 
   output:  // output, make update as needed
     path "${params.output_pattern}", emit: seqz
+    path "seqz-preprocess.tgz", emit: tar
 
   script:
     // add and initialize variables here as needed
 
     """
     sequenza-utils bam2seqz --normal ${normal_bam} --tumor ${tumor_bam} --fasta ${fasta} -gc ${gcwiggle} --output sample.seqz.gz;
-    sequenza-utils seqz_binning --seqz sample.seqz.gz --window 50 -o sample_bin50.seqz.gz
+    sequenza-utils seqz_binning --seqz sample.seqz.gz --window 50 -o sample_bin50.seqz.gz;
+    bash /tools/maketar.sh
     """
 }
 
