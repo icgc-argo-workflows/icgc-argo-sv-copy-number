@@ -48,8 +48,15 @@ params.container_version = ""
 params.container = ""
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.normalBam = ""
+params.tumorBam = ""
+params.referenceFasta = ""
+params.normalBai = ""
+params.tumorBai = ""
+params.referenceFai = ""
+params.runDir = ""
 params.expected_output = ""
+
 
 include { manta } from '../main'
 
@@ -66,15 +73,12 @@ process file_smart_diff {
 
   script:
     """
-    # Note: this is only for demo purpose, please write your own 'diff' according to your own needs.
-    # in this example, we need to remove date field before comparison eg, <div id="header_filename">Tue 19 Jan 2021<br/>test_rg_3.bam</div>
-    # sed -e 's#"header_filename">.*<br/>test_rg_3.bam#"header_filename"><br/>test_rg_3.bam</div>#'
+    #For the comparison of VCFs files produced by manta, we need to remove several fields of the header. 
+    #For simplicity reasons, the following test will compare one of the main outputs of manta (somaticSV.vcf) and will not consider the header at all. 
+    #Further versions will also include other output files and specific header tags.
 
-    cat ${output_file} \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_output
-
-    ([[ '${expected_file}' == *.gz ]] && gunzip -c ${expected_file} || cat ${expected_file}) \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_expected
+    zcat ${output_file}/results/variants/somaticSV.vcf.gz| grep -v "#" > normalized_output
+    zcat ${expected_file} | grep -v "#" > normalized_expected
 
     diff normalized_output normalized_expected \
       && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
@@ -84,12 +88,23 @@ process file_smart_diff {
 
 workflow checker {
   take:
-    input_file
+    normalBam
+    tumorBam
+    normalBai
+    tumorBai  
+    referenceFasta
+    referenceFai
     expected_output
 
   main:
     manta(
-      input_file
+      normalBam,
+      tumorBam,
+      normalBai,
+      tumorBai,  
+      referenceFasta,
+      referenceFai
+    
     )
 
     file_smart_diff(
@@ -101,7 +116,13 @@ workflow checker {
 
 workflow {
   checker(
-    file(params.input_file),
+    
+    file(params.normalBam),
+    file(params.tumorBam),
+    file(params.normalBai),
+    file(params.tumorBai),   
+    file(params.referenceFasta),
+    file(params.referenceFai),
     file(params.expected_output)
   )
 }
