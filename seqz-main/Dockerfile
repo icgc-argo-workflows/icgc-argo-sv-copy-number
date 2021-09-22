@@ -10,6 +10,7 @@ RUN apt-get --allow-releaseinfo-change update \
 ENV PATH="/tools:${PATH}"
 
 COPY runSequenza.R /tools/
+COPY maketar.sh /tools/
 
 ENTRYPOINT ["/usr/bin/env"]
 

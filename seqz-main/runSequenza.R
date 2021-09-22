@@ -65,3 +65,6 @@ dev.off()
 
 # Save R session
 save.image(paste0(sample_id,"_sequenza_session.RData"))
+
+writeLines(capture.output(sessionInfo()),paste0(sample_id,"_sessionInfo.txt"))
+           

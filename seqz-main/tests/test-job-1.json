@@ -1,5 +1,5 @@
 {
-    "seqz": "input/example_seqz.txt.gz",
+    "seqz": "input/sample_bin50.seqz.gz",
     "runscript": "../scripts/runSequenza.R",
     "expected_output": "expected/expected-segments.txt",
     "publish_dir": "outdir",

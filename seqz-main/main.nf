@@ -66,13 +66,15 @@ process seqzMain {
 
   output:  // output, make update as needed
     path "${params.output_pattern}", emit: results
+    path "seqz-main.tgz", emit: tar
     path "*segments.txt", emit: segments
 
   shell:
     // add and initialize variables here as needed
 
     """
-    Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome}
+    Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome};
+    bash /tools/maketar.sh
     """
 }
 
