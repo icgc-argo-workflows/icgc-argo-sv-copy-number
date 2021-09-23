@@ -1,0 +1,10 @@
+{
+    "tumor_bam": "input/tumorCRAM/test_T.cram",
+    "normal_bam": "input/normalCRAM/test_N.cram",
+    "gcwiggle": "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/sequenza_references/hg38.gc50Base.wig.gz",
+    "fasta": "input/tinyFastaForCRAMs/test.fasta.gz",
+    "expected_output": "expected/expected_bin50.seqz.gz",
+    "publish_dir": "outdir",
+    "cpus": 1,
+    "mem": 0.5
+}
