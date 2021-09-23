@@ -17,8 +17,8 @@
         "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
     },
     "dependencies": [
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.0",
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.0"
+        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.3.0",
+        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.3.0"
     ],
     "devDependencies": [],
     "contributors": [

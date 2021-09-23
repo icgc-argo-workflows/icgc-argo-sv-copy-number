@@ -26,7 +26,11 @@
 */
 
 nextflow.enable.dsl = 2
+<<<<<<< HEAD
+version = '0.3.0'  // package version
+=======
 version = '0.3.0'
+>>>>>>> d4ebed9880b579dae04909b7de823655061d82d6
 
 // universal params go here, change default value as needed
 params.container = ""
@@ -42,8 +46,13 @@ params.normal_bam     = ""
 params.gcwiggle       = ""
 params.fasta          = ""
 
+<<<<<<< HEAD
+include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.3.0/main.nf' params([*:params, 'cleanup': false])
+include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.3.0/main.nf' params([*:params, 'cleanup': false])
+=======
 include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.0/main.nf' params([*:params, 'cleanup': false])
 include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.0/main.nf' params([*:params, 'cleanup': false])
+>>>>>>> d4ebed9880b579dae04909b7de823655061d82d6
 
 
 // please update workflow code as needed
