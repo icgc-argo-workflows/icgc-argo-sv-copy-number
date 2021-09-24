@@ -1,25 +1,29 @@
 {
-    "name": "sequenza-wf",
+    "name": "seqz-main",
     "version": "0.2.5",
-    "description": "sequenza workflow",
+    "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
     "main": "main.nf",
     "deprecated": false,
     "keywords": [
-        "copy number",
-        "sequenza",
-        "ascn",
-        "cn",
-        "purity",
-        "ploidy"
+        "bioinformatics",
+        "seq",
+        "qc metrics"
     ],
     "repository": {
         "type": "git",
         "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
     },
-    "dependencies": [
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5",
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.5"
-    ],
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-structural-variation-cn-wg",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
     "devDependencies": [],
     "contributors": [
         {

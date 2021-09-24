@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 /*
-  Copyright (c) 2021, ICGC-ARGO-Structural-Variation-CN-WG
+  Copyright (c) 2021, ICGC ARGO
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,66 +22,72 @@
   SOFTWARE.
 
   Authors:
-    lDesiree
+    Desiree Schnidrig
 */
 
+/********************************************************************/
+/* this block is auto-generated based on info from pkg.json where   */
+/* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
 version = '0.2.5'
 
-// universal params go here, change default value as needed
-params.container = ""
+container = [
+    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.seqz-preprocess'
+]
+default_container_registry = 'ghcr.io'
+/********************************************************************/
+
+
+// universal params go here
 params.container_registry = ""
 params.container_version = ""
+params.container = ""
+
 params.cpus = 1
 params.mem = 1  // GB
-params.publish_dir = ""  // set to empty string will disable publishDir
+params.publish_dir = "output_dir/"  // set to empty string will disable publishDir
+
 
 // tool specific parmas go here, add / change as needed
 params.tumor_bam      = ""
 params.normal_bam     = ""
-params.gcwiggle       = ""
 params.fasta          = ""
+params.gcwiggle       = "${baseDir}/resources/hg38.gc50Base.wig.gz"
+params.output_pattern = "*bin50.seqz.gz"  // output file name pattern
 
-include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5/main.nf' params([*:params, 'cleanup': false])
-include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.5/main.nf' params([*:params, 'cleanup': false])
+process seqzPreprocess {
+  container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
+  publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
 
+  cpus params.cpus
+  memory "${params.mem} GB"
 
-// please update workflow code as needed
-workflow SequenzaWf {
+  input:  // input, make update as needed
+    path tumor_bam
+    path normal_bam
+    path fasta
+    path gcwiggle
 
-  take:
-    tumor_bam
-    normal_bam
-    gcwiggle
-    fasta
+  output:  // output, make update as needed
+    path "${params.output_pattern}", emit: seqz
 
-  main:
-    seqzPreprocess(
-      tumor_bam,
-      normal_bam,
-      gcwiggle,
-      fasta
-    )
-    
-    seqzMain(
-      seqzPreprocess.out.seqz
-    )
+  script:
+    // add and initialize variables here as needed
 
-
-  emit:  // update as needed
-    results = seqzMain.out.results
-    segments = seqzMain.out.segments
-
+    """
+    sequenza-utils bam2seqz --normal ${normal_bam} --tumor ${tumor_bam} --fasta ${fasta} -gc ${gcwiggle} --output sample.seqz.gz;
+    sequenza-utils seqz_binning --seqz sample.seqz.gz --window 50 -o sample_bin50.seqz.gz
+    """
 }
 
 
 // this provides an entry point for this main script, so it can be run directly without clone the repo
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
-  SequenzaWf(
+  seqzPreprocess(
     file(params.tumor_bam),
     file(params.normal_bam),
-    file(params.gcwiggle),
-    file(params.fasta)
+    file(params.fasta),
+    file(params.gcwiggle)
   )
 }
