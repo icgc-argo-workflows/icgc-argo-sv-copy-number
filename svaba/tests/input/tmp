@@ -1,0 +1,5 @@
+@HD	VN:1.3	SO:coordinate
+@SQ	SN:chr3:80001-360000	LN:280000	M5:ddae1293245419813bb83e20d983032f	UR:/mnt/scratchb/stlab-icgc/users/ng02/ICGC-ARGO/SVABAEnv/wfpm-demo/svaba/tests/reference/GRCh38_hla_decoy_ebv-chr3-region.fa
+@PG	ID:bwa	PN:bwa	CL:/scratcha/stlab-icgc/software/bin/bwa/bwa-0.7.10/bwa mem -t 20 -a /scratchb/stlab-icgc/users/ng02/ICGC-ARGO/SVABA_test/reference/GRCh38_hla_decoy_ebv-chr3-region.fa /scratchb/stlab-icgc/users/ng02/ICGC-ARGO/SVABA_test/ARGO-NEAT_minimal.v4/FASTQ/normal/normal_read1.fq.gz /scratchb/stlab-icgc/users/ng02/ICGC-ARGO/SVABA_test/ARGO-NEAT_minimal.v4/FASTQ/normal/normal_read2.fq.gz	VN:0.7.10-r789
+@PG	ID:sambamba	CL:view -S -t 20 -f bam /dev/stdin	PP:bwa	VN:1.0
+@PG	ID:samtools	PN:samtools	PP:sambamba	VN:1.10	CL:samtools view -H normal-chr3.GRCh38.cram

@@ -47,17 +47,19 @@ params.cpus = 1
 params.mem = 4  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
-// tool specific parmas go here, add / change as needed
+// tool specific params go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
 params.sample_id        = ""
+params.ref_genome_gz    = file(params.ref_genome_gz)
+params.ref_genome_fai   = file(params.ref_genome_fai)
+params.ref_genome_sa = file( params.ref_genome_gz+'.sa' )
+params.ref_genome_bwt = file( params.ref_genome_gz+'.bwt' )
+params.ref_genome_ann = file( params.ref_genome_gz+'.ann' )
+params.ref_genome_amb = file( params.ref_genome_gz+'.amb' )
+params.ref_genome_pac = file( params.ref_genome_gz+'.pac' )
 params.dbsnp_file       = "reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf"
-params.ref_genome_gz    = ""
-params.ref_genome_fai   = file(params.ref_genome_gz + '.fai')
 params.output_pattern   = "*.html"  // output file name pattern
-
-input_tumour_bai = file(params.input_tumour_bam + '.bai')
-input_normal_bai = file(params.input_normal_bam + '.bai')
 
 process svaba {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -71,6 +73,13 @@ process svaba {
     path input_normal_bam
     path input_tumour_bai
     path input_normal_bai
+    path ref_genome_gz
+    path ref_genome_fai
+    path ref_genome_sa
+    path ref_genome_bwt
+    path ref_genome_ann
+    path ref_genome_amb
+    path ref_genome_pac
 
   output:  // output, make update as needed
     path "${params.sample_id}/${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
@@ -82,7 +91,7 @@ process svaba {
     mkdir -p ${params.sample_id}
     svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
--G ${baseDir}/${params.ref_genome_gz} \
+-G ${ref_genome_gz} \
 -p ${params.mem} \
 -a ${params.sample_id} \
 -D ${baseDir}/${params.dbsnp_file}
@@ -91,14 +100,15 @@ process svaba {
     """
 }
 
-
 // this provides an entry point for this main script, so it can be run directly without clone the repo
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
 svaba(
 params.input_tumour_bam,
 params.input_normal_bam,
-input_tumour_bai,
-input_normal_bai
+params.input_tumour_bai,
+params.input_normal_bai,
+params.ref_genome_gz,
+params.ref_genome_fai
 )
 }
