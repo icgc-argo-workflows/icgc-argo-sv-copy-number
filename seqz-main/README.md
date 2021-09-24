@@ -1,5 +1,4 @@
 # seqz-main
-==========
 
 This tool will run [Sequenza](https://cran.r-project.org/web/packages/sequenza/vignettes/sequenza.html), an R package to analyze genomic sequencing data from paired normal-tumor samples, including cellularity and ploidy estimation; mutation and copy number (allele-specific and total copy number) detection, quantification and visualization.
 This tool contains an [adapted version](https://github.com/aroneklund/copynumber) of the sequenza-dependency package [copynumber](https://bioconductor.org/packages/release/bioc/html/copynumber.html) which includes hg38 cytobands.
