@@ -1,6 +1,8 @@
 FROM continuumio/miniconda3:4.8.2
 # newer version results in conflicts.
 
+LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
+
 RUN apt-get --allow-releaseinfo-change update \
     && apt-get install -y procps \
            
