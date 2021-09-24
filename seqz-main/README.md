@@ -9,7 +9,7 @@ This tool contains an [adapted version](https://github.com/aroneklund/copynumber
 The typical command for running the pipeline is as follows:
 
 ```
-nextflow run seqz-main/main.nf --tumor <tumor BAM/CRAM> --normal <normal BAM/CRAM> --ref <reference genome> --dbsnp <dbsnp vcf>
+nextflow run seqz-main/main.nf --seqz <seqz file> --genome <genome build>
 ```
 
 Mandatory arguments:
