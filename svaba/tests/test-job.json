@@ -7,5 +7,6 @@
     "expected_output"  : "expected/tumour_normal.svaba.somatic.indel.vcf",
     "ref_genome_gz"    : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa",
     "ref_genome_fai"   : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa.fai", 
+    "dbsnp_file"       : "reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf",
     "mem"              : 4
 }

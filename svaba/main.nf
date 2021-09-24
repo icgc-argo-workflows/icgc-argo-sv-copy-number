@@ -53,12 +53,12 @@ params.input_normal_bam = ""
 params.sample_id        = ""
 params.ref_genome_gz    = file(params.ref_genome_gz)
 params.ref_genome_fai   = file(params.ref_genome_fai)
-params.ref_genome_sa = file( params.ref_genome_gz+'.sa' )
-params.ref_genome_bwt = file( params.ref_genome_gz+'.bwt' )
-params.ref_genome_ann = file( params.ref_genome_gz+'.ann' )
-params.ref_genome_amb = file( params.ref_genome_gz+'.amb' )
-params.ref_genome_pac = file( params.ref_genome_gz+'.pac' )
-params.dbsnp_file       = "reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf"
+params.ref_genome_sa    = file( params.ref_genome_gz+'.sa' )
+params.ref_genome_bwt   = file( params.ref_genome_gz+'.bwt' )
+params.ref_genome_ann   = file( params.ref_genome_gz+'.ann' )
+params.ref_genome_amb   = file( params.ref_genome_gz+'.amb' )
+params.ref_genome_pac   = file( params.ref_genome_gz+'.pac' )
+params.dbsnp_file       = file( params.dbsnp_file)
 params.output_pattern   = "*.html"  // output file name pattern
 
 process svaba {
