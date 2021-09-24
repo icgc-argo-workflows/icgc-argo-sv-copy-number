@@ -1,5 +1,4 @@
 # seqz-main
-==========
 
 This tool will run [Sequenza](https://cran.r-project.org/web/packages/sequenza/vignettes/sequenza.html), an R package to analyze genomic sequencing data from paired normal-tumor samples, including cellularity and ploidy estimation; mutation and copy number (allele-specific and total copy number) detection, quantification and visualization.
 This tool contains an [adapted version](https://github.com/aroneklund/copynumber) of the sequenza-dependency package [copynumber](https://bioconductor.org/packages/release/bioc/html/copynumber.html) which includes hg38 cytobands.
@@ -10,7 +9,7 @@ This tool contains an [adapted version](https://github.com/aroneklund/copynumber
 The typical command for running the pipeline is as follows:
 
 ```
-nextflow run seqz-main/main.nf --tumor <tumor BAM/CRAM> --normal <normal BAM/CRAM> --ref <reference genome> --dbsnp <dbsnp vcf>
+nextflow run seqz-main/main.nf --seqz <seqz file> --genome <genome build>
 ```
 
 Mandatory arguments:
