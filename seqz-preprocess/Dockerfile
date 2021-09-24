@@ -1,4 +1,3 @@
-
 FROM continuumio/miniconda3:4.8.2
 # newer version results in conflicts.
 
