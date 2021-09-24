@@ -1,0 +1,37 @@
+{
+    "name": "seqz-main",
+    "version": "0.2.5",
+    "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "bioinformatics",
+        "seq",
+        "qc metrics"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-structural-variation-cn-wg",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "lDesiree",
+            "email": "desiree.schnidrig@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+}
