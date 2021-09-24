@@ -1,0 +1,37 @@
+{
+    "name": "seqz-preprocess",
+    "version": "0.2.0",
+    "description": "Sequenza preprocessing",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "bioinformatics",
+        "seq",
+        "qc metrics"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/wfpm-demo.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-structural-variation-cn-wg",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "lDesiree",
+            "email": "desiree.schnidrig@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/wfpm-demo/issues",
+    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/wfpm-demo#readme"
+}
