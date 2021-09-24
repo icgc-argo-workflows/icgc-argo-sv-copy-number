@@ -6,5 +6,5 @@
     "expected_output": "expected/expected_bin50.seqz.gz",
     "publish_dir": "outdir",
     "cpus": 1,
-    "mem": 0.5
+    "mem": 2
 }
