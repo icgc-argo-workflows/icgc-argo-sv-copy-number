@@ -1,12 +1,14 @@
 ## use ubuntu minimal base image
 FROM ubuntu:focal
 
-	# install dependencies
+LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
+
+# install dependencies
 RUN apt-get clean && \
 	apt-get update -y && \
 	apt-get install --no-install-recommends -y \
 	python3-minimal \
-        git \
+	git \
 	build-essential \
 	zlib1g-dev \
 	libbz2-dev \

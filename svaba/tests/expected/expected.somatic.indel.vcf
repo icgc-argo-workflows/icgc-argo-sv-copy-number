@@ -1,5 +1,4 @@
 ##fileformat=VCFv4.2
-##source=svaba(v1.1.0) run -t tumour-chr3.GRCh38.cram -n normal-chr3.GRCh38.cram -G GRCh38_hla_decoy_ebv-chr3-region.fa -p 4 -a tumour_normal -D /home/runner/work/icgc-argo-sv-copy-number/icgc-argo-sv-copy-number/svaba/tests/reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf 
 ##reference=GRCh38_hla_decoy_ebv-chr3-region.fa
 ##contig=<ID=chr3:80001-360000,length=280000>
 ##INFO=<ID=LOD,Number=1,Type=Float,Description="Log of the odds that variant is real vs artifact">
