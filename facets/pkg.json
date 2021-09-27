@@ -1,13 +1,16 @@
 {
-    "name": "seqz-main",
-    "version": "0.2.5",
-    "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
+    "name": "facets",
+    "version": "0.3.0",
+    "description": "facets tool",
     "main": "main.nf",
     "deprecated": false,
     "keywords": [
-        "bioinformatics",
-        "seq",
-        "qc metrics"
+        "facets",
+        "cnv",
+        "cna",
+        "copy number",
+        "purity",
+        "ploidy"
     ],
     "repository": {
         "type": "git",
@@ -27,8 +30,8 @@
     "devDependencies": [],
     "contributors": [
         {
-            "name": "lDesiree",
-            "email": "desiree.schnidrig@gmail.com"
+            "name": "Andrej Benjak",
+            "email": "abenjak@gmail.com"
         }
     ],
     "license": "MIT",

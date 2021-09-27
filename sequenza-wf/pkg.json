@@ -1,6 +1,6 @@
 {
     "name": "sequenza-wf",
-    "version": "0.2.0",
+    "version": "0.2.5",
     "description": "sequenza workflow",
     "main": "main.nf",
     "deprecated": false,
@@ -17,8 +17,8 @@
         "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
     },
     "dependencies": [
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.0",
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.0"
+        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5",
+        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.5"
     ],
     "devDependencies": [],
     "contributors": [

@@ -1,0 +1,12 @@
+# Version = 0.6.1 
+# Input = test.bc.gz 
+# tumor = test 
+# snp.nbhd = 500 
+# cval = 200 
+# min.nhet = 25 
+# genome = hg19 
+# Purity = 0.8914158 
+# Ploidy = 2.075126 
+# dipLogR = -0.04751629 
+# dipt = 
+# loglik = 82.53881 

@@ -1,13 +1,12 @@
 {
-    "name": "seqz-main",
-    "version": "0.2.5",
-    "description": "run sequenza (the input for this package - *.seqz.gz - can be generated with the seqz-preprocess package)",
+    "name": "snp-pileup",
+    "version": "0.3.1",
+    "description": "snp-pileup (for facets)",
     "main": "main.nf",
     "deprecated": false,
     "keywords": [
         "bioinformatics",
-        "seq",
-        "qc metrics"
+        "cna"
     ],
     "repository": {
         "type": "git",
@@ -23,12 +22,14 @@
             }
         ]
     },
-    "dependencies": [],
+    "dependencies": [
+        "github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1"
+    ],
     "devDependencies": [],
     "contributors": [
         {
-            "name": "lDesiree",
-            "email": "desiree.schnidrig@gmail.com"
+            "name": "Andrej Benjak",
+            "email": "abenjak@gmail.com"
         }
     ],
     "license": "MIT",

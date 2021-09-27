@@ -22,65 +22,82 @@
   SOFTWARE.
 
   Authors:
-    lDesiree
+    Andrej Benjak
+*/
+
+/*
+ This is an auto-generated checker workflow to test the generated main template workflow, it's
+ meant to illustrate how testing works. Please update to suit your own needs.
 */
 
 /********************************************************************/
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.2.5'
+version = '0.3.0'  // package version
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.seqz-main'
+    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.facets'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/
 
-
-// universal params go here
+// universal params
 params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 4
-params.mem = 16  // GB
-params.publish_dir = "output_dir/"  // set to empty string will disable publishDir
-
-
 // tool specific parmas go here, add / change as needed
-params.seqz = ""
-params.genome = 'hg38'
-params.output_pattern = "*_*" // output file name pattern are *.pdf|*.txt|*.RData
+params.tumor_id = ""
+params.pileup = ""
+params.genome = ""
+params.expected_output = ""
+
+include { facets } from '../main'
 
 
-process seqzMain {
+process file_smart_diff {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
-  publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
 
-  cpus params.cpus
-  memory "${params.mem} GB"
+  input:
+    path output_file
+    path expected_file
 
-  input:  // input, make update as needed
-    path seqz
+  output:
+    stdout()
 
-  output:  // output, make update as needed
-    path "${params.output_pattern}", emit: results
-    path "*segments.txt", emit: segments
-
-  shell:
-    // add and initialize variables here as needed
-
+  script:
     """
-    Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome}
+    diff ${output_file} ${expected_file} \
+      && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
     """
 }
 
 
-// this provides an entry point for this main script, so it can be run directly without clone the repo
-// using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
+workflow checker {
+  take:
+    pileup
+    tumor_id
+    genome
+    expected_output
+
+  main:
+    facets(
+      pileup
+    )
+
+    file_smart_diff(
+      facets.out.output_summary,
+      expected_output
+    )
+}
+
+
 workflow {
-  seqzMain(
-    file(params.seqz)
+  checker(
+    file(params.pileup),
+    params.tumor_id,
+    params.genome,
+    file(params.expected_output)
   )
 }
