@@ -1,6 +1,13 @@
 Manta
 =====
 
+To check installation you can execute:
+
+´´´
+cd ./tests
+nextflow run checker.nf -params-file test-job-1.json
+´´´
+
 To run with NextFlow you can execute:
 ```
 nextflow run main.nf \ 
