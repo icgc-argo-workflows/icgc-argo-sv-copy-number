@@ -53,6 +53,9 @@ params.help = null
 params.normalBam = ""
 params.tumorBam = ""
 params.referenceFasta = ""
+
+// These are not neccesary, the function will take them automatically using the name of the main file and adding the proper extension
+// They remain here in case there is a need to input them manually
 params.normalBai = ""
 params.tumorBai = ""
 params.referenceFai = ""
