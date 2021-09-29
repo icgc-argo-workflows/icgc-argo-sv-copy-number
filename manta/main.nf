@@ -204,8 +204,8 @@ workflow {
     file(params.normalBam),
     file(params.tumorBam),  
     file(params.referenceFasta),
-    Channel.fromPath(getBwaSecondaryFiles(params.normalBam,['.bai']), checkIfExists: true).collect(),
-    Channel.fromPath(getBwaSecondaryFiles(params.tumorBam,['.bai']), checkIfExists: true).collect(),
-    Channel.fromPath(getBwaSecondaryFiles(params.referenceFasta,['.fai']), checkIfExists: true).collect()  
+    Channel.fromPath(getSecondaryFiles(params.normalBam,['bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getSecondaryFiles(params.tumorBam,['bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getSecondaryFiles(params.referenceFasta,['fai']), checkIfExists: true).collect()  
   )
 }
