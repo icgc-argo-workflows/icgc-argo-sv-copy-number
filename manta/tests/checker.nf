@@ -96,7 +96,6 @@ workflow checker {
     tumorBai 
     referenceFai
     expected_output
-    available_memory
 
   main:
     manta(
@@ -106,7 +105,6 @@ workflow checker {
       normalBai,
       tumorBai,  
       referenceFai,
-      available_memory
     
     )
 
@@ -126,7 +124,6 @@ workflow {
     Channel.fromPath(getSecondaryFiles(params.normalBam,['bai']), checkIfExists: true).collect(),
     Channel.fromPath(getSecondaryFiles(params.tumorBam,['bai']), checkIfExists: true).collect(),
     Channel.fromPath(getSecondaryFiles(params.referenceFasta,['fai']), checkIfExists: true).collect(),  
-    file(params.expected_output),
-    params.available_memory 
+    file(params.expected_output)
   )
 }
