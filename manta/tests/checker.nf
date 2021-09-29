@@ -57,7 +57,7 @@ params.referenceFai = ""
 params.runDir = ""
 params.expected_output = ""
 
-
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 include { manta } from '../main'
 
 
@@ -89,10 +89,10 @@ process file_smart_diff {
 workflow checker {
   take:
     normalBam
-    tumorBam
-    normalBai
-    tumorBai  
+    tumorBam 
     referenceFasta
+    normalBai
+    tumorBai 
     referenceFai
     expected_output
 
@@ -100,9 +100,9 @@ workflow checker {
     manta(
       normalBam,
       tumorBam,
+      referenceFasta,
       normalBai,
       tumorBai,  
-      referenceFasta,
       referenceFai
     
     )
@@ -118,11 +118,11 @@ workflow {
   checker(
     
     file(params.normalBam),
-    file(params.tumorBam),
-    file(params.normalBai),
-    file(params.tumorBai),   
+    file(params.tumorBam), 
     file(params.referenceFasta),
-    file(params.referenceFai),
+    Channel.fromPath(getSecondaryFiles(params.normalBam,['bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getSecondaryFiles(params.tumorBam,['bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getSecondaryFiles(params.referenceFasta,['fai']), checkIfExists: true).collect(),  
     file(params.expected_output)
   )
 }

@@ -1,10 +1,7 @@
 {
     "normalBam": "input/normal.bam",
     "tumorBam": "input/tumor.bam",
-    "normalBai": "input/normal.bam.bai",
-    "tumorBai": "input/tumor.bam.bai",
     "referenceFasta": "input/reference.fna",
-    "referenceFai": "input/reference.fna.fai",
     "expected_output": "expected/somaticSV.vcf.gz",
     "publish_dir": "outdir",
     "cpus": 1,
