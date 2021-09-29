@@ -59,6 +59,10 @@ params.referenceFai = ""
 params.runDir = ""
 
 
+
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
+
+
 def helpMessage() {
     log.info"""
 
@@ -162,9 +166,9 @@ process manta {
   input:  // input, make update as needed
     path normalBam
     path tumorBam
+    path referenceFasta
     path normalBai
     path tumorBai
-    path referenceFasta
     path referenceFai
 
   output:  // output, make update as needed
@@ -198,10 +202,10 @@ process manta {
 workflow {
   manta(
     file(params.normalBam),
-    file(params.tumorBam),
-    file(params.normalBai),
-    file(params.tumorBai),   
+    file(params.tumorBam),  
     file(params.referenceFasta),
-    file(params.referenceFai)
+    Channel.fromPath(getBwaSecondaryFiles(params.normalBam,['.bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getBwaSecondaryFiles(params.tumorBam,['.bai']), checkIfExists: true).collect(),
+    Channel.fromPath(getBwaSecondaryFiles(params.referenceFasta,['.fai']), checkIfExists: true).collect()  
   )
 }
