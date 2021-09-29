@@ -1,0 +1,8 @@
+{
+    "normalBam": "input/normal.bam",
+    "tumorBam": "input/tumor.bam",
+    "referenceFasta": "input/reference.fna",
+    "expected_output": "expected/somaticSV.vcf.gz",
+    "publish_dir": "outdir",
+    "cpus": 1
+}
