@@ -53,6 +53,8 @@ params.tumour_bam = ""
 params.tumour_bai = ""
 params.normal_bam = ""
 params.normal_bai = ""
+params.fasta_file = ""
+params.fasta_fai = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
 params.test = false
@@ -71,6 +73,8 @@ process battenberg {
     path params.tumour_bai
     path params.normal_bam
     path params.normal_bai
+    path params.fasta_file
+    path params.fasta_fai
     path params.battenberg_ref_dir
 
   output:  // output, make update as needed
@@ -89,6 +93,7 @@ process battenberg {
       -t ${params.tumour_bam} \
       -n ${params.normal_bam} \
       --sex ${params.sex} \
+      -f ${params.fasta_file} \
       -r ${params.battenberg_ref_dir} \
       --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
       --cpu ${params.cpus} \
@@ -105,6 +110,7 @@ process battenberg {
       -t ${params.tumour_bam} \
       -n ${params.normal_bam} \
       --sex ${params.sex} \
+      -f ${params.fasta_file} \
       -r ${params.battenberg_ref_dir} \
       --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
       --cpu ${params.cpus}
@@ -121,6 +127,8 @@ workflow {
     file(params.tumour_bai),
     file(params.normal_bam),
     file(params.normal_bai),
+    file(params.fasta_file),
+    file(params.fasta_fai),
     file(params.battenberg_ref_dir),
   )
 }

@@ -26,8 +26,11 @@ RUN git clone https://github.com/cancerit/alleleCount.git /tmp/alleleCount && \
 	cd /tmp/alleleCount && \
 	./setup.sh /usr/local && \
 	cd / && \
+	cp -r /tmp/alleleCount/perl/lib/* /usr/local/lib && \
 	rm -r /tmp/alleleCount
 
+RUN cpan LEONT/Const-Fast-0.014.tar.gz
+RUN cpan PLICEASE/File-Which-1.27.tar.gz
 
 # R package dependencies
 RUN R -e "devtools::install_github('Crick-CancerGenomics/ascat/ASCAT@v2.5.2')"

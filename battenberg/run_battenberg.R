@@ -4,10 +4,11 @@ library(BattenbergHG38)
 library(optparse)
 
 option_list = list(
-  make_option(c("-t", "--tumourbam"), type="character", default=NULL, help="Tumour BAM file", metavar="character"),
-  make_option(c("-n", "--normalbam"), type="character", default=NULL, help="Normal BAM file", metavar="character"),
+  make_option(c("-t", "--tumourbam"), type="character", default=NULL, help="Tumour BAM/CRAM file", metavar="character"),
+  make_option(c("-n", "--normalbam"), type="character", default=NULL, help="Normal BAM/CRAM file", metavar="character"),
   make_option(c("--sex"), type="character", default=NULL, help="Sex of the sample", metavar="character"),
-  make_option(c("-r", "--reference"), type="character", default=".", help="Directory where reference files are found", metavar="character"),
+  make_option(c("-f", "--fastafile"), type="character", default=NULL, help="Path to fasta file used for CRAM alignment", metavar="character"),
+  make_option(c("-r", "--reference"), type="character", default=".", help="Directory where Battenberg reference files are found", metavar="character"),
   make_option(c("-i", "--imputeinfofile"), type="character", default=".", help="Impute info file", metavar="character"),
   make_option(c("--tumourname"), type="character", default=NULL, help="Samplename of the tumour", metavar="character"),
   make_option(c("--normalname"), type="character", default=NULL, help="Samplename of the normal", metavar="character"),
@@ -25,6 +26,7 @@ opt = parse_args(opt_parser)
 TUMOURBAM              = opt$tumourbam
 NORMALBAM              = opt$normalbam
 IS.MALE                = opt$sex=="male" | opt$sex=="Male" | opt$sex=="m" | opt$sex=="M"
+FASTA                  = opt$fastafile
 REF_DIR                = opt$r
 TUMOURNAME             = ifelse( !is.null(opt$tumourname), opt$tumourname, gsub(".bam", "", basename(opt$tumourbam)) )
 NORMALNAME             = ifelse( !is.null(opt$normalname), opt$normalname, gsub(".bam", "", basename(opt$normalbam)) )
@@ -44,7 +46,7 @@ REPLICCORRECTPREFIX = paste0(REF_DIR, "/RT_correction_hg38/1000G_RT_")
 IMPUTE_EXE          = "impute2"
 
 # WGS specific static
-ALLELECOUNTER = "alleleCounter"
+ALLELECOUNTER = "alleleCounter.pl"
 PROBLEMLOCI   = paste0(REF_DIR, "/probloci.txt.gz")
 
 PLATFORM_GAMMA        = 1
@@ -68,11 +70,12 @@ if(TESTING){
   message('**** Testing mode active. Results will not be accurate. ****')
 }
 
-battenberg(tumourname                  = TUMOURNAME,
+battenberg(tumourname        = TUMOURNAME,
  normalname                  = NORMALNAME,
  tumour_data_file            = TUMOURBAM,
  normal_data_file            = NORMALBAM,
  ismale                      = IS.MALE,
+ fasta.file                  = FASTA,
  imputeinfofile              = IMPUTEINFOFILE,
  g1000prefix                 = G1000PREFIX,
  g1000allelesprefix          = G1000PREFIX_AC,

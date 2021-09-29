@@ -53,6 +53,8 @@ params.tumour_bai = ""
 params.normal_bam = ""
 params.normal_bai = ""
 params.sex = ""
+params.fasta_file = ""
+params.fasta_fai = ""
 params.battenberg_ref_dir = ""
 params.expected_output = ""
 
@@ -84,6 +86,8 @@ workflow checker {
     tumour_bai
     normal_bam
     normal_bai
+    fasta_file
+    fasta_fai
     battenberg_ref_dir
     expected_output
 
@@ -93,6 +97,8 @@ workflow checker {
       tumour_bai,
       normal_bam,
       normal_bai,
+      fasta_file,
+      fasta_fai,
       battenberg_ref_dir,
     )
 
@@ -109,6 +115,8 @@ workflow {
     file(params.tumour_bai),
     file(params.normal_bam),
     file(params.normal_bai),
+    file(params.fasta_file),
+    file(params.fasta_fai),
     file(params.battenberg_ref_dir),
     file(params.expected_output)
   )
