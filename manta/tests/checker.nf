@@ -56,6 +56,7 @@ params.tumorBai = ""
 params.referenceFai = ""
 params.runDir = ""
 params.expected_output = ""
+params.available_memory = ""
 
 include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 include { manta } from '../main'
@@ -95,6 +96,7 @@ workflow checker {
     tumorBai 
     referenceFai
     expected_output
+    available_memory
 
   main:
     manta(
@@ -103,7 +105,8 @@ workflow checker {
       referenceFasta,
       normalBai,
       tumorBai,  
-      referenceFai
+      referenceFai,
+      available_memory
     
     )
 
@@ -123,6 +126,7 @@ workflow {
     Channel.fromPath(getSecondaryFiles(params.normalBam,['bai']), checkIfExists: true).collect(),
     Channel.fromPath(getSecondaryFiles(params.tumorBam,['bai']), checkIfExists: true).collect(),
     Channel.fromPath(getSecondaryFiles(params.referenceFasta,['fai']), checkIfExists: true).collect(),  
-    file(params.expected_output)
+    file(params.expected_output),
+    params.available_memory 
   )
 }
