@@ -51,6 +51,7 @@ params.container = ""
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
 params.ref_genome_gz = ""
+params.dbsnp_file = ""
 expected_file = "expected/expected.somatic.indel.vcf"
 
 include { svaba } from '../main.nf'
@@ -82,6 +83,7 @@ workflow checker {
     input_normal_bai
     ref_genome_gz
     ref_genome_gz_secondary_files
+    dbsnp_file
     expected_output
 
   main:
@@ -91,7 +93,8 @@ workflow checker {
         input_tumour_bai,
         input_normal_bai,
 	ref_genome_gz,
-        ref_genome_gz_secondary_files
+        ref_genome_gz_secondary_files,
+	dbsnp_file
     )
 
     file_smart_diff(
@@ -108,6 +111,7 @@ workflow {
     file(params.input_normal_bai),
     file(params.ref_genome_gz),
     Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_gz), checkIfExists: true).collect(),
+    file(params.dbsnp_file),
     file(expected_file)
   )
 }

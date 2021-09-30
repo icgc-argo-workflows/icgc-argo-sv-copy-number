@@ -78,13 +78,14 @@ process svaba {
     path input_normal_bai
     path ref_genome_gz
     path ref_genome_gz_secondary_files
+    path dbsnp_file
 
   output:  // output, make update as needed
     path "${params.sample_id}/${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
 
   script:
     // add and initialize variables here as needed
-    arg_dbsnp = params.dbsnp != 'NO_FILE' ? "-D ${params.dbsnp_file}": ""
+    arg_dbsnp = params.dbsnp_file != 'NO_FILE' ? "-D ${params.dbsnp_file}": ""
     """
     mkdir -p ${params.sample_id}
     svaba run -t ${input_tumour_bam} \
@@ -106,6 +107,6 @@ file(params.input_normal_bam),
 file(params.input_tumour_bai),
 file(params.input_normal_bai),
 file(params.ref_genome_gz),
-Channel.fromPath(getBWASecondaryFiles(params.ref_genome_gz), checkIfExists: true).collect()
-)
+Channel.fromPath(getBWASecondaryFiles(params.ref_genome_gz), checkIfExists: true).collect()), 
+file(params.dbsnp_file)
 }
