@@ -92,7 +92,7 @@ process svaba {
 -n ${input_normal_bam} \
 -G ${ref_genome_gz} \
 -p ${params.mem} \
--a ${params.sample_id} ${arg_dbsnp}
+-a ${params.sample_id} ${arg_dbsnp_file}
 
     mv ${params.sample_id}.* ${params.sample_id}/
     """
