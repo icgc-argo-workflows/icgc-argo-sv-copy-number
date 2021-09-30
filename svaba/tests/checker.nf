@@ -68,7 +68,7 @@ process file_smart_diff {
 
   script:
     """
-    cat ${output_file} | sed -e '/^##fileDate=[0-9]*/d' > normalized_output
+    cat ${output_file} | sed -e '/^##fileDate=[0-9]*/d' | sed -e '/^##source=svaba(v1.1.0).*/d' > normalized_output
     diff normalized_output expected.somatic.indel.vcf \
     && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
     """
