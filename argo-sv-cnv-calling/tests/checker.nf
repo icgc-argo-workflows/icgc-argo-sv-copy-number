@@ -44,6 +44,9 @@ params.input_file = ""
 params.expected_output = ""
 params.cleanup = false
 
+params.tumor_id = 'test-tumour-1'
+
+
 include { ArgoSvCnvCalling } from '../main'
 // include section starts
 // include section ends

@@ -44,10 +44,10 @@ include { demoCopyFile } from "./local_modules/demo-copy-file"
 include { getSecondaryFiles; getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf' params([*:params, 'cleanup': false])
 include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5/main.nf' params([*:params, 'cleanup': false])
 include { svaba } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/svaba@0.2.0/main.nf' params([*:params, 'cleanup': false])
-include { helpMessage; facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.3.0/main.nf' params([*:params, 'cleanup': false])
+include { facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.3.0/main.nf' params([*:params, 'cleanup': false])
 include { battenberg } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/battenberg@0.1.0/main.nf' params([*:params, 'cleanup': false])
-include { helpMessage; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
-include { helpMessage; manta } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/manta@0.2.0/main.nf' params([*:params, 'cleanup': false])
+include { snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
+include { manta } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/manta@0.2.0/main.nf' params([*:params, 'cleanup': false])
 include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.5/main.nf' params([*:params, 'cleanup': false])
 
 

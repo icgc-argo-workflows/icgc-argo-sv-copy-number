@@ -1,4 +1,5 @@
 {
+    "pileup": "input/test.bc.gz",
     "input_file": "input/test_rg_3.bam",
     "expected_output": "expected/expected.test_rg_3.bam",
     "publish_dir": "outdir",
