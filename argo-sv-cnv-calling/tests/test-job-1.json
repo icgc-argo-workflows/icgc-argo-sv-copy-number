@@ -1,5 +1,6 @@
 {
     "pileup": "input/test.bc.gz",
+    "dbsnp_file": "input/test.dbsnp.vcf.gz",
     "input_file": "input/test_rg_3.bam",
     "expected_output": "expected/expected.test_rg_3.bam",
     "publish_dir": "outdir",
