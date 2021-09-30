@@ -50,15 +50,11 @@ params.container = ""
 // tool specific parmas go here, add / change as needed
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
-params.ref_genome_fai = file( params.ref_genome_gz+'.fai' )
-params.ref_genome_sa  = file( params.ref_genome_gz+'.sa' )
-params.ref_genome_bwt = file( params.ref_genome_gz+'.bwt' )
-params.ref_genome_ann = file( params.ref_genome_gz+'.ann' )
-params.ref_genome_amb = file( params.ref_genome_gz+'.amb' )
-params.ref_genome_pac = file( params.ref_genome_gz+'.pac' )
-expected_file = file("expected/expected.somatic.indel.vcf")
+params.ref_genome_gz = ""
+expected_file = "expected/expected.somatic.indel.vcf"
 
 include { svaba } from '../main.nf'
+include { getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main'
 
 process file_smart_diff {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -85,12 +81,7 @@ workflow checker {
     input_tumour_bai
     input_normal_bai
     ref_genome_gz
-    ref_genome_fai
-    ref_genome_sa
-    ref_genome_bwt
-    ref_genome_ann
-    ref_genome_amb
-    ref_genome_pac
+    ref_genome_gz_secondary_files
     expected_output
 
   main:
@@ -100,12 +91,7 @@ workflow checker {
         input_tumour_bai,
         input_normal_bai,
 	ref_genome_gz,
-	ref_genome_fai,
-        ref_genome_sa,
-        ref_genome_bwt,
-        ref_genome_ann,
-        ref_genome_amb,
-        ref_genome_pac
+        ref_genome_gz_secondary_files
     )
 
     file_smart_diff(
@@ -121,12 +107,7 @@ workflow {
     file(params.input_tumour_bai),
     file(params.input_normal_bai),
     file(params.ref_genome_gz),
-    file(params.ref_genome_gz+'.fai'),
-    file( params.ref_genome_gz+'.sa'),
-    file( params.ref_genome_gz+'.bwt'),
-    file( params.ref_genome_gz+'.ann'),
-    file( params.ref_genome_gz+'.amb'),
-    file( params.ref_genome_gz+'.pac'),
+    Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_gz), checkIfExists: true).collect(),
     file(expected_file)
   )
 }

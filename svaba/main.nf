@@ -51,15 +51,18 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 params.input_tumour_bam = ""
 params.input_normal_bam = ""
 params.sample_id        = ""
-params.ref_genome_gz    = file(params.ref_genome_gz)
-params.ref_genome_fai   = file(params.ref_genome_fai)
-params.ref_genome_sa    = file( params.ref_genome_gz+'.sa' )
-params.ref_genome_bwt   = file( params.ref_genome_gz+'.bwt' )
-params.ref_genome_ann   = file( params.ref_genome_gz+'.ann' )
-params.ref_genome_amb   = file( params.ref_genome_gz+'.amb' )
-params.ref_genome_pac   = file( params.ref_genome_gz+'.pac' )
-params.dbsnp_file       = file( params.dbsnp_file)
+params.ref_genome_gz    = ""
+params.ref_genome_fai   = ""
+params.ref_genome_sa    = ""
+params.ref_genome_bwt   = ""
+params.ref_genome_ann   = ""
+params.ref_genome_amb   = ""
+params.ref_genome_pac   = ""
+params.dbsnp_file       = "NO_FILE"
 params.output_pattern   = "*.html"  // output file name pattern
+
+// Include modules
+include { getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main'
 
 process svaba {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -74,27 +77,21 @@ process svaba {
     path input_tumour_bai
     path input_normal_bai
     path ref_genome_gz
-    path ref_genome_fai
-    path ref_genome_sa
-    path ref_genome_bwt
-    path ref_genome_ann
-    path ref_genome_amb
-    path ref_genome_pac
+    path ref_genome_gz_secondary_files
 
   output:  // output, make update as needed
     path "${params.sample_id}/${params.sample_id}.svaba.somatic.indel.vcf", emit: output_file
 
   script:
     // add and initialize variables here as needed
-
+    arg_dbsnp = params.dbsnp != 'NO_FILE' ? "-D ${params.dbsnp_file}": ""
     """
     mkdir -p ${params.sample_id}
     svaba run -t ${input_tumour_bam} \
 -n ${input_normal_bam} \
 -G ${ref_genome_gz} \
 -p ${params.mem} \
--a ${params.sample_id} \
--D ${baseDir}/${params.dbsnp_file}
+-a ${params.sample_id} ${arg_dbsnp}
 
     mv ${params.sample_id}.* ${params.sample_id}/
     """
@@ -104,11 +101,11 @@ process svaba {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
 svaba(
-params.input_tumour_bam,
-params.input_normal_bam,
-params.input_tumour_bai,
-params.input_normal_bai,
-params.ref_genome_gz,
-params.ref_genome_fai
+file(params.input_tumour_bam),
+file(params.input_normal_bam),
+file(params.input_tumour_bai),
+file(params.input_normal_bai),
+file(params.ref_genome_gz),
+Channel.fromPath(getBWASecondaryFiles(params.ref_genome_gz), checkIfExists: true).collect()
 )
 }
