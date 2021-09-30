@@ -85,7 +85,7 @@ process svaba {
 
   script:
     // add and initialize variables here as needed
-    arg_dbsnp = params.dbsnp_file != 'NO_FILE' ? "-D ${params.dbsnp_file}": ""
+    arg_dbsnp_file = !dbsnp_file.name.startsWith("NO_FILE") ? "-D ${dbsnp_file}" : ""
     """
     mkdir -p ${params.sample_id}
     svaba run -t ${input_tumour_bam} \
