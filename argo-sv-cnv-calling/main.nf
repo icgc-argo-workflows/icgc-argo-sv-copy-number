@@ -140,14 +140,74 @@ include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variat
 // please update workflow code as needed
 workflow ArgoSvCnvCalling {
   take:  // update as needed
-    input_file
+    input_file  // TODO: remove later
+    ref_genome_fa
+    ref_genome_gz_secondary_files
+    tumour_aln_seq
+    tumour_aln_seq_idx
+    normal_aln_seq
+    normal_aln_seq_idx
+    gcwiggle
+    dbsnp_file
 
 
   main:  // update as needed
-    demoCopyFile(input_file)
+    demoCopyFile(input_file)  // TODO: remove later
+
+    seqzPreprocess(
+      tumour_aln_seq,
+      normal_aln_seq,
+      ref_genome_fa,
+      gcwiggle
+    )
+
+    seqzMain(
+      seqzPreprocess.out.seqz
+    )
+
+    svaba(
+      tumour_aln_seq,
+      normal_aln_seq,
+      tumour_aln_seq_idx,
+      normal_aln_seq_idx,
+      ref_genome_fa,
+      ref_genome_gz_secondary_files,
+      dbsnp_file
+    )
+
+    /*
+    battenberg(
+      tumour_aln_seq,
+      tumour_aln_seq_idx,
+      normal_aln_seq,
+      normal_aln_seq_idx,
+      battenberg_ref_dir  // shouldn't use folder as input
+    )
+    */
+
+    snpPileup(
+      tumour_aln_seq,
+      normal_aln_seq,
+      dbsnp_file,
+      ref_genome_fa,
+      ref_genome_gz_secondary_files
+    )
+
+    facets(
+      snpPileup.out.output_file
+    )
+
+    manta(
+      normal_aln_seq,
+      tumour_aln_seq,
+      ref_genome_fa,
+      normal_aln_seq_idx,
+      tumour_aln_seq_idx,
+      ref_genome_gz_secondary_files
+    )
 
 
-  emit:  // update as needed
+  emit:  // TODO: update as needed
     output_file = demoCopyFile.out.output_file
 
 }
@@ -157,6 +217,16 @@ workflow ArgoSvCnvCalling {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
   ArgoSvCnvCalling(
-    file(params.input_file)
+    file(params.input_ifle),
+    file(params.ref_genome_fa),
+    Channel.fromPath(getSecondaryFiles(params.ref_genome_fa, ['gzi'])).concat(
+      Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))
+    ).collect(),
+    file(params.tumour_aln_seq),
+    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', 'crai'])).collect(),
+    file(params.normal_aln_seq),
+    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', 'crai'])).collect(),
+    file(params.gcwiggle),
+    file(params.dbsnp_file)
   )
 }

@@ -42,14 +42,23 @@ params.container_version = ""
 // tool specific parmas go here, add / change as needed
 params.input_file = ""
 params.expected_output = ""
-params.cleanup = false
 
-params.tumor_id = 'test-tumour-1'
+params.cleanup = true
+
+params.ref_genome_build = 'hg38'  // GRCh38
+params.ref_genome_fa = ""
+params.tumour_aln_seq = ""
+params.normal_aln_seq = ""
+params.tumour_id = ""
+
+params.donor_sex = "female"  // or "male"
+params.gcwiggle = ""
+params.dbsnp_file = ""
+params.is_test = false  // must be explictly set to true when run as test
 
 
 include { ArgoSvCnvCalling } from '../main'
-// include section starts
-// include section ends
+include { getSecondaryFiles; getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf' params([*:params, 'cleanup': false])
 
 
 process file_smart_diff {
@@ -81,23 +90,51 @@ process file_smart_diff {
 workflow checker {
   take:
     input_file
+    ref_genome_fa
+    ref_genome_gz_secondary_files
+    tumour_aln_seq
+    tumour_aln_seq_idx
+    normal_aln_seq
+    normal_aln_seq_idx
+    gcwiggle
+    dbsnp_file
     expected_output
 
   main:
     ArgoSvCnvCalling(
-      input_file
+      input_file,
+      ref_genome_fa,
+      ref_genome_gz_secondary_files,
+      tumour_aln_seq,
+      tumour_aln_seq_idx,
+      normal_aln_seq,
+      normal_aln_seq_idx,
+      gcwiggle,
+      dbsnp_file
     )
 
+    /*
     file_smart_diff(
       ArgoSvCnvCalling.out.output_file,
       expected_output
     )
+    */
 }
 
 
 workflow {
   checker(
     file(params.input_file),
+    file(params.ref_genome_fa),
+    Channel.fromPath(getSecondaryFiles(params.ref_genome_fa, ['gzi'])).concat(
+      Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))
+    ).collect(),
+    file(params.tumour_aln_seq),
+    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', 'crai'])).collect(),
+    file(params.normal_aln_seq),
+    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', 'crai'])).collect(),
+    file(params.gcwiggle),
+    file(params.dbsnp_file),
     file(params.expected_output)
   )
 }
