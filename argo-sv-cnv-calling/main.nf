@@ -40,6 +40,10 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 params.input_file = ""
 params.cleanup = true
 
+params.study_id = ""
+params.tumour_aln_analysis_id = ""
+params.normal_aln_analysis_id = ""
+
 params.ref_genome_build = 'hg38'  // GRCh38
 params.ref_genome_fa = ""
 params.tumour_aln_seq = ""
@@ -51,6 +55,26 @@ params.gcwiggle = ""
 params.dbsnp_file = ""
 params.is_test = false  // must be explictly set to true when run as test
 
+// song/score download/upload
+params.max_retries = 3
+params.first_retry_wait_time = 10
+params.song_url = ""
+params.score_url = ""
+params.api_token = ""
+
+params.download = [:]
+
+// song/score download
+download_params = [
+    'cpus': params.cpus,
+    'mem': params.mem,
+    'max_retries': params.max_retries,
+    'first_retry_wait_time': params.first_retry_wait_time,
+    'song_url': params.song_url,
+    'score_url': params.score_url,
+    'api_token': params.api_token,
+    *:(params.download ?: [:])
+]
 
 // seqzPreproces
 seqzPreprocess_params = [
@@ -127,6 +151,7 @@ manta_params = [
 
 
 include { demoCopyFile } from "./local_modules/demo-copy-file"
+include { SongScoreDownload as dnldT; SongScoreDownload as dnldN } from './wfpr_modules/github.com/icgc-argo/nextflow-data-processing-utility-tools/song-score-download@2.6.2/main.nf' params(download_params)
 include { getSecondaryFiles; getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf' params([*:params, 'cleanup': false])
 include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5/main.nf' params([*:seqzPreprocess_params, 'cleanup': false])
 include { svaba } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/svaba@0.2.0/main.nf' params([*:svaba_params, 'cleanup': false])
@@ -141,6 +166,9 @@ include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variat
 workflow ArgoSvCnvCalling {
   take:  // update as needed
     input_file  // TODO: remove later
+    study_id
+    tumour_aln_analysis_id
+    normal_aln_analysis_id
     ref_genome_fa
     ref_genome_gz_secondary_files
     tumour_aln_seq
@@ -152,6 +180,20 @@ workflow ArgoSvCnvCalling {
 
 
   main:  // update as needed
+    if (tumour_aln_analysis_id && normal_aln_analysis_id) {
+      // download tumour aligned seq and metadata from song/score (analysis type: sequencing_alignment)
+      dnldT(study_id, tumour_aln_analysis_id)
+      tumour_aln_seq = dnldT.out.files.flatten().first()
+      tumour_aln_seq_idx = dnldT.out.files.flatten().last()
+      tumour_aln_meta = dnldT.out.analysis_json
+
+      // download normal aligned seq and metadata from song/score (analysis type: sequencing_alignment)
+      dnldN(study_id, normal_aln_analysis_id)
+      normal_aln_seq = dnldN.out.files.flatten().first()
+      normal_aln_seq_idx = dnldN.out.files.flatten().last()
+      normal_aln_meta = dnldN.out.analysis_json
+    }
+
     demoCopyFile(input_file)  // TODO: remove later
 
     seqzPreprocess(
@@ -218,6 +260,9 @@ workflow ArgoSvCnvCalling {
 workflow {
   ArgoSvCnvCalling(
     file(params.input_ifle),
+    params.study_id,
+    params.tumour_aln_analysis_id,
+    params.normal_aln_analysis_id,
     file(params.ref_genome_fa),
     Channel.fromPath(getSecondaryFiles(params.ref_genome_fa, ['gzi'])).concat(
       Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))

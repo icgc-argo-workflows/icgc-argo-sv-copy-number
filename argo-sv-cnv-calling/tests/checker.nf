@@ -56,6 +56,26 @@ params.gcwiggle = ""
 params.dbsnp_file = ""
 params.is_test = false  // must be explictly set to true when run as test
 
+// song/score download/upload
+params.max_retries = 3
+params.first_retry_wait_time = 10
+params.song_url = ""
+params.score_url = ""
+params.api_token = ""
+
+params.download = [:]
+
+// song/score download
+download_params = [
+    'cpus': params.cpus,
+    'mem': params.mem,
+    'max_retries': params.max_retries,
+    'first_retry_wait_time': params.first_retry_wait_time,
+    'song_url': params.song_url,
+    'score_url': params.score_url,
+    'api_token': params.api_token,
+    *:(params.download ?: [:])
+]
 
 include { ArgoSvCnvCalling } from '../main'
 include { getSecondaryFiles; getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf' params([*:params, 'cleanup': false])
@@ -90,6 +110,9 @@ process file_smart_diff {
 workflow checker {
   take:
     input_file
+    study_id
+    tumour_aln_analysis_id
+    normal_aln_analysis_id
     ref_genome_fa
     ref_genome_gz_secondary_files
     tumour_aln_seq
@@ -103,6 +126,9 @@ workflow checker {
   main:
     ArgoSvCnvCalling(
       input_file,
+      study_id,
+      tumour_aln_analysis_id,
+      normal_aln_analysis_id,
       ref_genome_fa,
       ref_genome_gz_secondary_files,
       tumour_aln_seq,
@@ -125,6 +151,9 @@ workflow checker {
 workflow {
   checker(
     file(params.input_file),
+    params.study_id,
+    params.tumour_aln_analysis_id,
+    params.normal_aln_analysis_id,
     file(params.ref_genome_fa),
     Channel.fromPath(getSecondaryFiles(params.ref_genome_fa, ['gzi'])).concat(
       Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))

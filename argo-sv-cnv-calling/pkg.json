@@ -18,6 +18,7 @@
     },
     "dependencies": [
         "github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1",
+        "github.com/icgc-argo/nextflow-data-processing-utility-tools/song-score-download@2.6.2",
         "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/manta@0.2.0",
         "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1",
         "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/battenberg@0.1.0",
