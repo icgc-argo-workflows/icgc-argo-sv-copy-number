@@ -49,15 +49,17 @@ params.container = ""
 
 // tool specific parmas go here, add / change as needed
 params.tumour_bam = ""
-params.tumour_bai = ""
 params.normal_bam = ""
-params.normal_bai = ""
 params.sex = ""
 params.fasta_file = ""
-params.fasta_fai = ""
 params.battenberg_ref_dir = ""
 params.expected_output = ""
 
+params.tumour_bai = ""
+params.normal_bai = ""
+params.fasta_fai = ""
+
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
 include { battenberg } from '../main'
 
@@ -99,7 +101,7 @@ workflow checker {
       normal_bai,
       fasta_file,
       fasta_fai,
-      battenberg_ref_dir,
+      battenberg_ref_dir
     )
 
     file_smart_diff(
@@ -112,11 +114,11 @@ workflow checker {
 workflow {
   checker(
     file(params.tumour_bam),
-    file(params.tumour_bai),
+    Channel.fromPath(getSecondaryFiles(params.tumour_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.normal_bam),
-    file(params.normal_bai),
+    Channel.fromPath(getSecondaryFiles(params.normal_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.fasta_file),
-    file(params.fasta_fai),
+    Channel.fromPath(getSecondaryFiles(params.fasta_file,['fai']), checkIfExists: true).collect(),
     file(params.battenberg_ref_dir),
     file(params.expected_output)
   )

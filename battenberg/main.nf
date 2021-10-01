@@ -50,16 +50,19 @@ params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
 params.tumour_bam = ""
-params.tumour_bai = ""
 params.normal_bam = ""
-params.normal_bai = ""
 params.fasta_file = ""
-params.fasta_fai = ""
 params.sex = ""
 params.battenberg_ref_dir = ""
 params.test = false
+
+params.tumour_bai = ""
+params.normal_bai = ""
+params.fasta_fai = ""
+
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
 process battenberg {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -69,13 +72,13 @@ process battenberg {
   memory "${params.mem} GB"
 
   input:  // input, make update as needed
-    path params.tumour_bam
-    path params.tumour_bai
-    path params.normal_bam
-    path params.normal_bai
-    path params.fasta_file
-    path params.fasta_fai
-    path params.battenberg_ref_dir
+    path tumour_bam
+    path tumour_bai
+    path normal_bam
+    path normal_bai
+    path fasta_file
+    path fasta_fai
+    path battenberg_ref_dir
 
   output:  // output, make update as needed
     path "${params.output_pattern}", emit: output_file
@@ -84,38 +87,22 @@ process battenberg {
 
     // add and initialize variables here as needed
 
-    if( params.test )
+    arg_test = params.test ? "--test" : ""
 
       """
       mkdir -p output_dir
       
       run_battenberg.R \
-      -t ${params.tumour_bam} \
-      -n ${params.normal_bam} \
+      -t ${tumour_bam} \
+      -n ${normal_bam} \
       --sex ${params.sex} \
-      -f ${params.fasta_file} \
-      -r ${params.battenberg_ref_dir} \
-      --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
-      --cpu ${params.cpus} \
-      --test
+      -f ${fasta_file} \
+      -r ${battenberg_ref_dir} \
+      --imputeinfofile ${battenberg_ref_dir}/impute_info.txt \
+      --cpu ${params.cpus} ${arg_test}
       
       """
-
-    else
-
-      """
-      mkdir -p output_dir
       
-      run_battenberg.R \
-      -t ${params.tumour_bam} \
-      -n ${params.normal_bam} \
-      --sex ${params.sex} \
-      -f ${params.fasta_file} \
-      -r ${params.battenberg_ref_dir} \
-      --imputeinfofile ${params.battenberg_ref_dir}/impute_info.txt \
-      --cpu ${params.cpus}
-      
-      """
 }
 
 
@@ -124,11 +111,11 @@ process battenberg {
 workflow {
   battenberg(
     file(params.tumour_bam),
-    file(params.tumour_bai),
+    Channel.fromPath(getSecondaryFiles(params.tumour_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.normal_bam),
-    file(params.normal_bai),
+    Channel.fromPath(getSecondaryFiles(params.normal_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.fasta_file),
-    file(params.fasta_fai),
-    file(params.battenberg_ref_dir),
+    Channel.fromPath(getSecondaryFiles(params.fasta_file,['fai']), checkIfExists: true).collect(),
+    file(params.battenberg_ref_dir)
   )
 }

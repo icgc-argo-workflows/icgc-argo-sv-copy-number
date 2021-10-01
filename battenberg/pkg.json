@@ -22,7 +22,8 @@
             }
         ]
     },
-    "dependencies": [],
+    "dependencies": [
+            "github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1"],
     "devDependencies": [],
     "contributors": [
         {
