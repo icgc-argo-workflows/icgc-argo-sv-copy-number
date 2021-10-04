@@ -37,7 +37,6 @@ params.mem = 1  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
 params.cleanup = true
 
 params.study_id = ""
@@ -63,6 +62,10 @@ params.score_url = ""
 params.api_token = ""
 
 params.download = [:]
+params.cram2bam = [
+  'cpus': 2,
+  'mem': 2
+]
 
 // song/score download
 download_params = [
@@ -74,6 +77,12 @@ download_params = [
     'score_url': params.score_url,
     'api_token': params.api_token,
     *:(params.download ?: [:])
+]
+
+cram2bam_params = [
+  'cpus': params.cpus,
+  'mem': params.mem,
+  *:(params.cram2bam ?: [:])
 ]
 
 // seqzPreproces
@@ -150,7 +159,7 @@ manta_params = [
 ]
 
 
-include { demoCopyFile } from "./local_modules/demo-copy-file"
+include { cram2bam as cram2bamN; cram2bam as cram2bamT } from './wfpr_modules/github.com/icgc-argo-workflows/dna-seq-processing-tools/cram2bam@0.1.0/main.nf' params(cram2bam_params)
 include { SongScoreDownload as dnldT; SongScoreDownload as dnldN } from './wfpr_modules/github.com/icgc-argo/nextflow-data-processing-utility-tools/song-score-download@2.6.2/main.nf' params(download_params)
 include { getSecondaryFiles; getBwaSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf' params([*:params, 'cleanup': false])
 include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5/main.nf' params([*:seqzPreprocess_params, 'cleanup': false])
@@ -165,7 +174,6 @@ include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variat
 // please update workflow code as needed
 workflow ArgoSvCnvCalling {
   take:  // update as needed
-    input_file  // TODO: remove later
     study_id
     tumour_aln_analysis_id
     normal_aln_analysis_id
@@ -194,11 +202,22 @@ workflow ArgoSvCnvCalling {
       normal_aln_meta = dnldN.out.analysis_json
     }
 
-    demoCopyFile(input_file)  // TODO: remove later
+    // some tools seem have trouble take CRAM as input, temporary solution here to convert CRAM to BAM
+    cram2bamT(
+      tumour_aln_seq,
+      ref_genome_fa,
+      ref_genome_gz_secondary_files
+    )
+
+    cram2bamN(
+      normal_aln_seq,
+      ref_genome_fa,
+      ref_genome_gz_secondary_files
+    )
 
     seqzPreprocess(
-      tumour_aln_seq,
-      normal_aln_seq,
+      cram2bamT.out.output_bam,
+      cram2bamN.out.output_bam,
       ref_genome_fa,
       gcwiggle
     )
@@ -208,10 +227,10 @@ workflow ArgoSvCnvCalling {
     )
 
     svaba(
-      tumour_aln_seq,
-      normal_aln_seq,
-      tumour_aln_seq_idx,
-      normal_aln_seq_idx,
+      cram2bamT.out.output_bam,
+      cram2bamN.out.output_bam,
+      cram2bamT.out.output_bai,
+      cram2bamN.out.output_bai,
       ref_genome_fa,
       ref_genome_gz_secondary_files,
       dbsnp_file
@@ -250,7 +269,7 @@ workflow ArgoSvCnvCalling {
 
 
   emit:  // TODO: update as needed
-    output_file = demoCopyFile.out.output_file
+    cncf = facets.out.output_cncf
 
 }
 
@@ -259,7 +278,6 @@ workflow ArgoSvCnvCalling {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
   ArgoSvCnvCalling(
-    file(params.input_ifle),
     params.study_id,
     params.tumour_aln_analysis_id,
     params.normal_aln_analysis_id,

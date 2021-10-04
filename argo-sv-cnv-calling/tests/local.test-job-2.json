@@ -13,7 +13,6 @@
     "donor_sex": "female",
     "gcwiggle": "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/sequenza_references/hg38.gc50Base.wig.gz",
     "dbsnp_file": "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/gatk-resources/af-only-gnomad.pass-only.hg38.vcf.gz",
-    "input_file": "input/test_rg_3.bam",
     "expected_output": "expected/expected.test_rg_3.bam",
     "is_test": true,
     "publish_dir": "outdir",

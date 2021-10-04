@@ -40,7 +40,6 @@ params.container_registry = ""
 params.container_version = ""
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
 params.expected_output = ""
 
 params.cleanup = true
@@ -109,7 +108,6 @@ process file_smart_diff {
 
 workflow checker {
   take:
-    input_file
     study_id
     tumour_aln_analysis_id
     normal_aln_analysis_id
@@ -125,7 +123,6 @@ workflow checker {
 
   main:
     ArgoSvCnvCalling(
-      input_file,
       study_id,
       tumour_aln_analysis_id,
       normal_aln_analysis_id,
@@ -150,7 +147,6 @@ workflow checker {
 
 workflow {
   checker(
-    file(params.input_file),
     params.study_id,
     params.tumour_aln_analysis_id,
     params.normal_aln_analysis_id,
