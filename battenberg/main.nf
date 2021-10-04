@@ -56,10 +56,6 @@ params.sex = ""
 params.battenberg_ref_dir = ""
 params.test = false
 
-params.tumour_bai = ""
-params.normal_bai = ""
-params.fasta_fai = ""
-
 params.output_pattern = "*_subclones.txt"  // output file name pattern
 
 include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
