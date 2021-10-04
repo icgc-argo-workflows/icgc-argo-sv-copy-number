@@ -47,8 +47,8 @@ params.cleanup = true
 
 params.ref_genome_build = 'hg38'  // GRCh38
 params.ref_genome_fa = ""
-params.tumour_aln_seq = ""
-params.normal_aln_seq = ""
+params.tumour_aln_seq = "NO_FILE1"
+params.normal_aln_seq = "NO_FILE2"
 params.tumour_id = ""
 
 params.donor_sex = "female"  // or "male"
