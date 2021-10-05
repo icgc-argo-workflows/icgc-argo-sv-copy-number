@@ -43,7 +43,7 @@ params.dbsnp   = "${baseDir}/resources/dbsnp_151.common.hg38.vcf.gz"
 params.ref     = ""
 params.cleanup = true
 
-include { helpMessage; facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.3.0/main.nf' params([*:params, 'cleanup': false])
+include { helpMessage; facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.0/main.nf' params([*:params, 'cleanup': false])
 include { helpMessage; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
 include { makeTar } from './local_modules/make_tar.nf' params([*:params, 'cleanup': false])
 
@@ -69,15 +69,9 @@ workflow FacetsWf {
       snpPileup.out.output_file
     )
 
-    makeTar(
-      facets.out.output_summary,
-      facets.out.output_cncf,
-      facets.out.output_plot
-    )
-
 
   emit:
-    results = makeTar.out.output_tar
+    results = facets.out.facets_results
 
 }
 
