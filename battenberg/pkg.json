@@ -1,6 +1,6 @@
 {
     "name": "battenberg",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Battenberg subclonal CN profiling",
     "main": "main.nf",
     "deprecated": false,
@@ -22,7 +22,9 @@
             }
         ]
     },
-    "dependencies": [],
+    "dependencies": [
+            "github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1"
+    ],
     "devDependencies": [],
     "contributors": [
         {
