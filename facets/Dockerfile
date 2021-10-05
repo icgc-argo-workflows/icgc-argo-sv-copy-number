@@ -18,6 +18,9 @@ RUN mkdir -p /tools
 ENV PATH="/tools:${PATH}"
 COPY facetsRun.R /tools/
 
+# Add results script:
+COPY facetsResults.sh /tools/
+
 ENTRYPOINT ["/usr/bin/env"]
 
 CMD ["/bin/bash"]

@@ -34,7 +34,7 @@
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.3.0'  // package version
+version = '0.4.0'
 
 container = [
     'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.facets'
@@ -66,11 +66,12 @@ process file_smart_diff {
   output:
     stdout()
 
-  script:
-    """
-    diff ${output_file} ${expected_file} \
+  shell:
+    '''
+    tar -zxvf !{output_file} test.out
+    diff $(basename -s .tgz !{output_file}).out !{expected_file} \
       && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
-    """
+    '''
 }
 
 
@@ -87,7 +88,7 @@ workflow checker {
     )
 
     file_smart_diff(
-      facets.out.output_summary,
+      facets.out.facets_results,
       expected_output
     )
 }

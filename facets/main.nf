@@ -29,7 +29,7 @@
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.3.0'  // package version
+version = '0.4.0'
 
 container = [
     'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.facets'
@@ -45,7 +45,7 @@ params.container = ""
 
 params.cpus = 1
 params.mem = 30  // GB
-params.publish_dir = "facets_outdir"  // set to empty string will disable publishDir
+params.publish_dir = ""  // set to empty string will disable publishDir
 params.help = null
 
 // tool specific parmas go here, add / change as needed
@@ -118,15 +118,16 @@ process facets {
 
 
   output:
-    path "*.Rdata", emit: output_Rdata
-    path "*.out", emit: output_summary
-    path "*.cncf.txt", optional: true, emit: output_cncf
-    path "*.cncf.pdf", optional: true, emit: output_plot
+    path "*.tgz", emit: facets_results
 
 
   shell:
     '''
+        #run facets
         facetsRun.R --seed !{params.seed} --minNDepth !{params.minNDepth} --maxNDepth !{params.maxNDepth} --snp_nbhd !{params.snp_nbhd} --minGC !{params.minGC} --maxGC !{params.maxGC} --cval !{params.cval} --pre_cval !{params.pre_cval} --genome !{params.genome} --min_nhet !{params.min_nhet} --outPrefix !{params.tumor_id} --tumorName !{params.tumor_id} !{pileup}
+        
+        #fetch results (cncf and plot can be missing from facets results, but if produced both will be available)
+        facetsResults.sh -s !{params.tumor_id}.out $(if [[ -f !{params.tumor_id}.cncf.txt && -f !{params.tumor_id}.cncf.pdf ]]; then echo -c !{params.tumor_id}.cncf.txt -p !{params.tumor_id}.cncf.pdf; fi)
     '''
 }
 
