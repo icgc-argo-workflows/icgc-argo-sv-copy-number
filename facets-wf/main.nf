@@ -37,26 +37,47 @@ params.mem = 1  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.tumor   = ""
+params.normal  = ""
+params.dbsnp   = "${baseDir}/resources/dbsnp_151.common.hg38.vcf.gz"
+params.ref     = ""
 params.cleanup = true
 
-include { demoCopyFile } from "./local_modules/demo-copy-file"
 include { helpMessage; facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.3.0/main.nf' params([*:params, 'cleanup': false])
 include { helpMessage; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
-
+include { makeTar } from './local_modules/make_tar.nf' params([*:params, 'cleanup': false])
 
 // please update workflow code as needed
 workflow FacetsWf {
-  take:  // update as needed
-    input_file
+
+  take:
+    tumor
+    normal
+    dbsnp
+    ref
 
 
-  main:  // update as needed
-    demoCopyFile(input_file)
+  main:
+    snpPileup(
+      tumor,
+      normal,
+      dbsnp,
+      ref
+    )
+
+    facets(
+      snpPileup.out.output_file
+    )
+
+    makeTar(
+      facets.out.output_summary,
+      facets.out.output_cncf,
+      facets.out.output_plot
+    )
 
 
-  emit:  // update as needed
-    output_file = demoCopyFile.out.output_file
+  emit:
+    results = makeTar.out.output_tar
 
 }
 
@@ -65,6 +86,9 @@ workflow FacetsWf {
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
   FacetsWf(
-    file(params.input_file)
+    file(params.tumor),
+    file(params.normal),
+    file(params.dbsnp),
+    file(params.ref)
   )
 }

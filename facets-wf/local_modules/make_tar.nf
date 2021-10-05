@@ -8,22 +8,32 @@
 
 nextflow.enable.dsl = 2
 
-params.input_file = ""
-params.publish_dir = ""
+params.summary = ""
+params.cncf = ""
+params.plot = ""
+params.publish_dir = "facets-wf_out"
 
 
-process demoCopyFile {
+process makeTar {
   publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
 
   input:
-    path input_file
+    path summary
+    path cncf
+    path plot
 
   output:
-    path "output_dir/*", emit: output_file
+    path "*.tar.gz", emit: output_tar
 
-  script:
-    """
-    mkdir output_dir
-    cp ${input_file} output_dir/
-    """
+  shell:
+    '''
+# initiate json report file
+echo foo > facets_metrics.json
+
+# make tar_content.json
+echo bar > tar_content.json
+
+# tar the results
+tar -czf $(basename -s .out !{summary}).tgz hs_metrics.json tar_content.json !{cncf} !{plot}
+    '''
 }
