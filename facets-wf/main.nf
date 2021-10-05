@@ -43,9 +43,8 @@ params.dbsnp   = "${baseDir}/resources/dbsnp_151.common.hg38.vcf.gz"
 params.ref     = ""
 params.cleanup = true
 
-include { helpMessage; facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.0/main.nf' params([*:params, 'cleanup': false])
-include { helpMessage; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
-include { makeTar } from './local_modules/make_tar.nf' params([*:params, 'cleanup': false])
+include { getSecondaryFiles; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
+include { facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.0/main.nf' params([*:params, 'cleanup': false])
 
 // please update workflow code as needed
 workflow FacetsWf {
@@ -55,6 +54,7 @@ workflow FacetsWf {
     normal
     dbsnp
     ref
+    ref_idx
 
 
   main:
@@ -62,7 +62,8 @@ workflow FacetsWf {
       tumor,
       normal,
       dbsnp,
-      ref
+      ref,
+      ref_idx
     )
 
     facets(
@@ -83,6 +84,7 @@ workflow {
     file(params.tumor),
     file(params.normal),
     file(params.dbsnp),
-    file(params.ref)
+    file(params.ref),
+    Channel.fromPath(getSecondaryFiles(params.ref, ['fai','gzi']), checkIfExists: false).collect(),
   )
 }

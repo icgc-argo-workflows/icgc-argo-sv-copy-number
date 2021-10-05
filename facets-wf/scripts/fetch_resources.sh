@@ -11,6 +11,6 @@ if [ $(md5sum $(dirname $0)/../resources/dbsnp_151.common.hg38.vcf.gz | cut -f1 
 then
     echo "Checksum OK."
 else
-    rm -f $(dirname $0)/resources/hg38.gc50Base.wig.gz
+    rm -f $(dirname $0)/resources/dbsnp_151.common.hg38.vcf.gz
     echo "Checksum failed. Try downloading again."
 fi
