@@ -48,7 +48,7 @@ params.container_version = ""
 params.container = ""
 
 // tool specific parmas go here, add / change as needed
-params.tumor_id = ""
+params.out_prefix = ""
 params.pileup = ""
 params.genome = ""
 params.expected_output = ""
@@ -78,7 +78,7 @@ process file_smart_diff {
 workflow checker {
   take:
     pileup
-    tumor_id
+    out_prefix
     genome
     expected_output
 
@@ -97,7 +97,7 @@ workflow checker {
 workflow {
   checker(
     file(params.pileup),
-    params.tumor_id,
+    params.out_prefix,
     params.genome,
     file(params.expected_output)
   )
