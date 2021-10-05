@@ -236,15 +236,13 @@ workflow ArgoSvCnvCalling {
       dbsnp_file
     )
 
-    /*
     battenberg(
       tumour_aln_seq,
       tumour_aln_seq_idx,
       normal_aln_seq,
       normal_aln_seq_idx,
-      battenberg_ref_dir  // shouldn't use folder as input
+      file(params.battenberg_ref_dir)  // shouldn't use folder as input, temp for now
     )
-    */
 
     snpPileup(
       tumour_aln_seq,

@@ -15,7 +15,7 @@
         "score_mem":8
     },
     "ref_genome_build": "hg38",
-    "ref_genome_fa": "/home/ubuntu/references/reference_genome/GRCh38_hla_decoy_ebv.fa",
+    "ref_genome_fa": "/home/ubuntu/references/reference_genome/GRCh38_hla_decoy_ebv.fa.gz",
     "tumour_id": "test-tumour-1",
     "donor_sex": "female",
     "gcwiggle": "https://object.cancercollaboratory.org:9080/swift/v1/genomics-public-data/sequenza_references/hg38.gc50Base.wig.gz",
