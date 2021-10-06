@@ -82,16 +82,16 @@ workflow checker {
   take:
     tumor_bam
     normal_bam
-    gcwiggle
     fasta
+    gcwiggle
     expected_segments
 
   main:
     SequenzaWf(
       tumor_bam,
       normal_bam,
-      gcwiggle,
-      fasta
+      fasta,
+      gcwiggle
     )
 
     file_smart_diff(
