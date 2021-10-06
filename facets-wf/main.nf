@@ -22,11 +22,11 @@
   SOFTWARE.
 
   Authors:
-    lDesiree
+    Andrej Benjak
 */
 
 nextflow.enable.dsl = 2
-version = '0.2.5'
+version = '0.2.0'
 
 // universal params go here, change default value as needed
 params.container = ""
@@ -37,40 +37,42 @@ params.mem = 1  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
 // tool specific parmas go here, add / change as needed
-params.tumor_bam      = ""
-params.normal_bam     = ""
-params.gcwiggle       = ""
-params.fasta          = ""
+params.tumor   = ""
+params.normal  = ""
+params.dbsnp   = "${baseDir}/resources/dbsnp_151.common.hg38.vcf.gz"
+params.ref     = ""
+params.cleanup = true
 
-include { seqzPreprocess } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-preprocess@0.2.5/main.nf' params([*:params, 'cleanup': false])
-include { seqzMain } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/seqz-main@0.2.5/main.nf' params([*:params, 'cleanup': false])
-
+include { getSecondaryFiles; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
+include { facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.1/main.nf' params([*:params, 'cleanup': false])
 
 // please update workflow code as needed
-workflow SequenzaWf {
+workflow FacetsWf {
 
   take:
-    tumor_bam
-    normal_bam
-    gcwiggle
-    fasta
+    tumor
+    normal
+    dbsnp
+    ref
+    ref_idx
+
 
   main:
-    seqzPreprocess(
-      tumor_bam,
-      normal_bam,
-      gcwiggle,
-      fasta
+    snpPileup(
+      tumor,
+      normal,
+      dbsnp,
+      ref,
+      ref_idx
     )
-    
-    seqzMain(
-      seqzPreprocess.out.seqz
+
+    facets(
+      snpPileup.out.output_file
     )
 
 
-  emit:  // update as needed
-    results = seqzMain.out.results
-    segments = seqzMain.out.segments
+  emit:
+    results = facets.out.facets_results
 
 }
 
@@ -78,10 +80,11 @@ workflow SequenzaWf {
 // this provides an entry point for this main script, so it can be run directly without clone the repo
 // using this command: nextflow run <git_acc>/<repo>/<pkg_name>/<main_script>.nf -r <pkg_name>.v<pkg_version> --params-file xxx
 workflow {
-  SequenzaWf(
-    file(params.tumor_bam),
-    file(params.normal_bam),
-    file(params.gcwiggle),
-    file(params.fasta)
+  FacetsWf(
+    file(params.tumor),
+    file(params.normal),
+    file(params.dbsnp),
+    file(params.ref),
+    Channel.fromPath(getSecondaryFiles(params.ref, ['fai','gzi']), checkIfExists: false).collect(),
   )
 }
