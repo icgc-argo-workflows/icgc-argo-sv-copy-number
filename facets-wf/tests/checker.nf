@@ -40,13 +40,17 @@ params.container_registry = ""
 params.container_version = ""
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
+params.tumor = ""
+params.normal = ""
+params.dbsnp = ""
+params.ref = ""
+params.genome = ""
+params.out_prefix = ""
 params.expected_output = ""
 params.cleanup = false
 
 include { FacetsWf } from '../main'
-// include section starts
-// include section ends
+include { getSecondaryFiles } from '../wfpr_modules/github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1/main.nf'
 
 
 process file_smart_diff {
@@ -57,36 +61,35 @@ process file_smart_diff {
   output:
     stdout()
 
-  script:
-    """
-    # Note: this is only for demo purpose, please write your own 'diff' according to your own needs.
-    # in this example, we need to remove date field before comparison eg, <div id="header_filename">Tue 19 Jan 2021<br/>test_rg_3.bam</div>
-    # sed -e 's#"header_filename">.*<br/>test_rg_3.bam#"header_filename"><br/>test_rg_3.bam</div>#'
-
-    cat ${output_file[0]} \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_output
-
-    ([[ '${expected_file}' == *.gz ]] && gunzip -c ${expected_file} || cat ${expected_file}) \
-      | sed -e 's#"header_filename">.*<br/>#"header_filename"><br/>#' > normalized_expected
-
-    diff normalized_output normalized_expected \
+  shell:
+    '''
+    tar -zxvf !{output_file} test.out
+    diff $(basename -s .tgz !{output_file}).out !{expected_file} \
       && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
-    """
+    '''
 }
 
 
 workflow checker {
   take:
-    input_file
+    tumor
+    normal
+    dbsnp
+    ref
+    ref_idx
     expected_output
 
   main:
     FacetsWf(
-      input_file
+      tumor,
+      normal,
+      dbsnp,
+      ref,
+      ref_idx
     )
 
     file_smart_diff(
-      FacetsWf.out.output_file,
+      FacetsWf.out.results,
       expected_output
     )
 }
@@ -94,7 +97,11 @@ workflow checker {
 
 workflow {
   checker(
-    file(params.input_file),
+    file(params.tumor),
+    file(params.normal),
+    file(params.dbsnp),
+    file(params.ref),
+    Channel.fromPath(getSecondaryFiles(params.ref, ['fai','gzi']), checkIfExists: false).collect(),
     file(params.expected_output)
   )
 }

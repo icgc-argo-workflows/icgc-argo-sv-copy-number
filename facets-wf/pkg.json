@@ -15,7 +15,7 @@
     },
     "dependencies": [
         "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1",
-        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.0"
+        "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.1"
     ],
     "devDependencies": [],
     "contributors": [

@@ -44,7 +44,7 @@ params.ref     = ""
 params.cleanup = true
 
 include { getSecondaryFiles; snpPileup } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1/main.nf' params([*:params, 'cleanup': false])
-include { facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.0/main.nf' params([*:params, 'cleanup': false])
+include { facets } from './wfpr_modules/github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/facets@0.4.1/main.nf' params([*:params, 'cleanup': false])
 
 // please update workflow code as needed
 workflow FacetsWf {
