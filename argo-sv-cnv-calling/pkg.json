@@ -1,6 +1,6 @@
 {
     "name": "argo-sv-cnv-calling",
-    "version": "0.1.0",
+    "version": "0.1.0.1",
     "description": "ARGO structure and copy number variation calling workflow",
     "main": "main.nf",
     "deprecated": false,
