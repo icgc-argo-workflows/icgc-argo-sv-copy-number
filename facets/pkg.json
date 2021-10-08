@@ -1,0 +1,40 @@
+{
+    "name": "facets",
+    "version": "0.4.1",
+    "description": "facets tool",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "facets",
+        "cnv",
+        "cna",
+        "copy number",
+        "purity",
+        "ploidy"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-workflows",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "Andrej Benjak",
+            "email": "abenjak@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number#readme"
+}
