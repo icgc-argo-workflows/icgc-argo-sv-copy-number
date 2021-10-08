@@ -23,7 +23,7 @@
         ]
     },
     "dependencies": [
-        "github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1.1"
+        "github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1"
     ],
     "devDependencies": [],
     "contributors": [
