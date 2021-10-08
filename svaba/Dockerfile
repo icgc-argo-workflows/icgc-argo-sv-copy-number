@@ -1,7 +1,7 @@
 ## use ubuntu minimal base image
 FROM ubuntu:focal
 
-LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
+LABEL org.opencontainers.image.source https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number
 
 # install dependencies
 RUN apt-get clean && \

@@ -38,16 +38,19 @@ params.publish_dir = ""
 params.container = ""
 params.container_registry = ""
 params.container_version = ""
+params.cpus = 1
+params.mem = 3  // GB
 
 // tool specific parmas go here, add / change as needed
-params.input_file = ""
-params.expected_output = ""
+params.tumor_bam         = ""
+params.normal_bam        = ""
+params.gcwiggle          = ""
+params.fasta             = ""
+params.expected_segments = ""
+
 params.cleanup = false
 
 include { SequenzaWf } from '../main'
-// include section starts
-// include section ends
-
 
 process file_smart_diff {
   input:
@@ -77,24 +80,33 @@ process file_smart_diff {
 
 workflow checker {
   take:
-    input_file
-    expected_output
+    tumor_bam
+    normal_bam
+    fasta
+    gcwiggle
+    expected_segments
 
   main:
     SequenzaWf(
-      input_file
+      tumor_bam,
+      normal_bam,
+      fasta,
+      gcwiggle
     )
 
     file_smart_diff(
-      SequenzaWf.out.output_file,
-      expected_output
+      SequenzaWf.out.segments,
+      expected_segments
     )
 }
 
 
 workflow {
   checker(
-    file(params.input_file),
-    file(params.expected_output)
+    file(params.tumor_bam),
+    file(params.normal_bam),
+    file(params.fasta),
+    file(params.gcwiggle),
+    file(params.expected_segments)
   )
 }

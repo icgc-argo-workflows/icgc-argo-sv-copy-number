@@ -2,7 +2,7 @@
 FROM csoriano/snptest:latest as snptest
 FROM bioconductor/bioconductor_docker:RELEASE_3_12
 
-LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
+LABEL org.opencontainers.image.source https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
 
