@@ -32,7 +32,7 @@ nextflow.enable.dsl = 2
 version = '0.2.0'  // package version
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.svaba'
+    'ghcr.io': 'ghcr.io/icgc-argo-workflows/icgc-argo-sv-copy-number.svaba'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/
