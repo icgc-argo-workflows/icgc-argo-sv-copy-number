@@ -105,7 +105,7 @@ if(params.tumor == null) error "Missing mandatory '--tumor' parameter"
 if(params.normal == null) error "Missing mandatory '--normal' parameter"
 if(params.ref == null) error "Missing mandatory '--ref' parameter"
 
-include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1/main.nf'
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
 process snpPileup {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"

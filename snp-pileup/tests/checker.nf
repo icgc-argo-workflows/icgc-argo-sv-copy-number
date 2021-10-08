@@ -56,7 +56,7 @@ params.ref = ""
 params.expected_output = ""
 
 include { snpPileup } from '../main'
-include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1/main.nf'
+include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
 
 process file_smart_diff {
