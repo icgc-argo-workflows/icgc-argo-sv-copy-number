@@ -34,10 +34,10 @@
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.3.0'  // package version
+version = '0.4.1.1'
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.facets'
+    'ghcr.io': 'ghcr.io/icgc-argo-workflows/icgc-argo-sv-copy-number.facets'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/
@@ -48,7 +48,7 @@ params.container_version = ""
 params.container = ""
 
 // tool specific parmas go here, add / change as needed
-params.tumor_id = ""
+params.out_prefix = ""
 params.pileup = ""
 params.genome = ""
 params.expected_output = ""
@@ -66,18 +66,19 @@ process file_smart_diff {
   output:
     stdout()
 
-  script:
-    """
-    diff ${output_file} ${expected_file} \
+  shell:
+    '''
+    tar -zxvf !{output_file} test.out
+    diff $(basename -s .tgz !{output_file}).out !{expected_file} \
       && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
-    """
+    '''
 }
 
 
 workflow checker {
   take:
     pileup
-    tumor_id
+    out_prefix
     genome
     expected_output
 
@@ -87,7 +88,7 @@ workflow checker {
     )
 
     file_smart_diff(
-      facets.out.output_summary,
+      facets.out.facets_results,
       expected_output
     )
 }
@@ -96,7 +97,7 @@ workflow checker {
 workflow {
   checker(
     file(params.pileup),
-    params.tumor_id,
+    params.out_prefix,
     params.genome,
     file(params.expected_output)
   )

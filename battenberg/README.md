@@ -21,7 +21,7 @@ Note that for Battenberg to run with tiny test files, some data has to be faked.
 # Usage
 
 ```
-nextflow run main.nf --tumour_bam <tumour BAM file> --tumour_bai <tumour BAM index file> --normal_bam <normal BAM file> --normal_bai <normal BAM index file> --battenberg_ref_dir <path to Battenberg reference directory> --battenberg_impute_info <path to impute_info.txt> --sex <male|female>
+nextflow run main.nf --tumour_bam <tumour BAM/CRAM file> --tumour_bai <tumour BAM/CRAM index file> --normal_bam <normal BAM/CRAM file> --normal_bai <normal BAM/CRAM index file> --fasta_file <fasta file> --fasta_fai <fasta index> --battenberg_ref_dir <path to Battenberg reference directory> --battenberg_impute_info <path to impute_info.txt> --sex <male|female>
 ```
 The path `--battenberg_ref_dir` should point to the `battenberg_references` directory, under which all the subdirectories with the required GRCh38 reference files should be placed:
 
@@ -41,4 +41,4 @@ battenberg_references/
 
 # Output
 
-Alongside various plots, the main output is the file `<tumour BAM file>_subclones.txt`, along with purity estimates in `<tumour BAM file>_rho_and_psi.txt`. Detailed information on all outputs can be found [here](https://github.com/Wedge-lab/battenberg#description-of-the-output).
+Alongside various plots, the main output is the file `<tumour BAM/CRAM file>_subclones.txt`, along with purity estimates in `<tumour BAM/CRAM file>_rho_and_psi.txt`. Detailed information on all outputs can be found [here](https://github.com/Wedge-lab/battenberg#description-of-the-output).

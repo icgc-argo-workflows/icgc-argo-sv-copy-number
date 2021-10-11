@@ -1,6 +1,6 @@
 {
     "pileup": "input/test.bc.gz",
-    "tumor_id": "test",
+    "out_prefix": "test",
     "genome": "hg19",
     "expected_output": "expected/expected.out",
     "publish_dir": "outdir",

@@ -1,0 +1,12 @@
+{
+    "tumor": "input/test_T.cram",
+    "normal": "input/test_N.cram",
+    "ref": "input/test.chr17_1-100k.fasta.gz",
+    "dbsnp": "input/test.dbsnp_hg19_chr17.vcf.gz",
+    "genome": "hg19",
+    "out_prefix": "test",
+    "expected_output": "expected/expected.out",
+    "publish_dir": "outdir",
+    "cpus": 1,
+    "mem": 0.5
+}
