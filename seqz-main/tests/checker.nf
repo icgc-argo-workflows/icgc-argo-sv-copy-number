@@ -37,7 +37,7 @@ nextflow.enable.dsl = 2
 version = '0.2.5.1'
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.seqz-main'
+    'ghcr.io': 'ghcr.io/icgc-argo-workflows/icgc-argo-sv-copy-number.seqz-main'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/

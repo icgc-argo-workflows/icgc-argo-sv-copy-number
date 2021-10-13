@@ -1,0 +1,12 @@
+{
+    "sample_id"        : "tumour_normal", 
+    "input_tumour_bam" : "input/tumour-chr3.GRCh38.cram",
+    "input_tumour_bai" : "input/tumour-chr3.GRCh38.cram.crai",
+    "input_normal_bam" : "input/normal-chr3.GRCh38.cram",
+    "input_normal_bai" : "input/normal-chr3.GRCh38.cram.crai",
+    "expected_output"  : "expected/tumour_normal.svaba.somatic.indel.vcf",
+    "ref_genome_gz"    : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa",
+    "ref_genome_fai"   : "reference/GRCh38_hla_decoy_ebv-chr3-region.fa.fai", 
+    "dbsnp_file"       : "reference/af-only-gnomad.pass-only.hg38.INDELS-chr3.vcf",
+    "mem"              : 4
+}
