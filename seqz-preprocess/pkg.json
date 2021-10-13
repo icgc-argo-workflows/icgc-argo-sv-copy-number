@@ -1,6 +1,6 @@
 {
     "name": "seqz-preprocess",
-    "version": "0.2.5",
+    "version": "0.2.5.1",
     "description": "Sequenza preprocessing",
     "main": "main.nf",
     "deprecated": false,
