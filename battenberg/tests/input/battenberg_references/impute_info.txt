@@ -1,1 +1,1 @@
-11	input/battenberg_references/shapeit2/ALL.v1a.shapeit2_integrated_chr11.GRCh38.20181129.phased.legend	input/battenberg_references/imputation/genetic_map_chr11_combined_b38.txt	input/battenberg_references/shapeit2/ALL.v1a.shapeit2_integrated_chr11.GRCh38.20181129.phased.hap.gz	0	550000	1
+11	battenberg_references/shapeit2/ALL.v1a.shapeit2_integrated_chr11.GRCh38.20181129.phased.legend	battenberg_references/imputation/genetic_map_chr11_combined_b38.txt	battenberg_references/shapeit2/ALL.v1a.shapeit2_integrated_chr11.GRCh38.20181129.phased.hap.gz	0	550000	1

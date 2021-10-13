@@ -1,0 +1,39 @@
+##fileformat=VCFv4.2
+##reference=GRCh38_hla_decoy_ebv-chr3-region.fa
+##contig=<ID=chr3:80001-360000,length=280000>
+##INFO=<ID=LOD,Number=1,Type=Float,Description="Log of the odds that variant is real vs artifact">
+##INFO=<ID=BX,Number=.,Type=String,Description="Table of BX tag counts for supporting reads">
+##INFO=<ID=READNAMES,Number=.,Type=String,Description="IDs of ALT reads">
+##INFO=<ID=NM,Number=1,Type=Integer,Description="Number of mismatches of this alignment fragment to reference">
+##INFO=<ID=PON,Number=1,Type=Integer,Description="Number of normal samples that have this indel present">
+##INFO=<ID=REPSEQ,Number=1,Type=String,Description="Repeat sequence near the variant">
+##INFO=<ID=SPAN,Number=1,Type=Integer,Description="Size of the indel">
+##INFO=<ID=DBSNP,Number=0,Type=Flag,Description="Variant found in dbSNP">
+##INFO=<ID=MAPQ,Number=1,Type=Integer,Description="Mapping quality (BWA-MEM) of the assembled contig">
+##INFO=<ID=SCTG,Number=1,Type=String,Description="Identifier for the contig assembled by svaba to make the indel call">
+##FILTER=<ID=VLOWAF,Description="allelic fraction < 0.05">
+##FILTER=<ID=SINGLEBX,Description="Variant is supported by only a single BX tag (if run with 10X Genomics data)">
+##FILTER=<ID=PASS,Description="LOD score pass">
+##FILTER=<ID=NONVAR,Description="0/0 is the most likely genotype">
+##FILTER=<ID=LOWAS,Description="Less than 80% of contig length is covered by a supporting read">
+##FILTER=<ID=MULTIMATCH,Description="Low MAPQ and this contig fragment maps well to multiple locations">
+##FILTER=<ID=LOWLOD,Description="LOD score is less than the cutoff">
+##FILTER=<ID=SHORTALIGNMENT,Description="Matched (M) contig frag to left or right of indel < 20 bp">
+##FILTER=<ID=REPVAR,Description="Multiple conflicting variants at a highly repetitive region">
+##FILTER=<ID=LOWMAPQ,Description="Assembly contig has less than MAPQ 10">
+##FORMAT=<ID=LO,Number=1,Type=Float,Description="Log-odds that this variant is real vs artifact">
+##FORMAT=<ID=SR,Number=1,Type=Integer,Description="Number of spanning reads for this variants">
+##FORMAT=<ID=SL,Number=1,Type=Float,Description="Alignment-quality Scaled log-odds, where LO is LO * (MAPQ - 2*NM)/60">
+##FORMAT=<ID=PL,Number=.,Type=Float,Description="Normalized likelihood of the current genotype">
+##FORMAT=<ID=LR,Number=1,Type=Float,Description="Log-odds that this variant is AF=0 vs AF>=0.5">
+##FORMAT=<ID=GQ,Number=1,Type=String,Description="Genotype quality (currently not supported. Always 0)">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Depth of coverage: Number of reads covering site.">
+##FORMAT=<ID=AD,Number=1,Type=Integer,Description="Allele depth: Number of reads supporting the variant">
+##FORMAT=<ID=CR,Number=1,Type=Integer,Description="Number of cigar-supported reads for this variant">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Most likely genotype">
+##SAMPLE=<ID=tumour-chr3.GRCh38.cram>
+##SAMPLE=<ID=normal-chr3.GRCh38.cram>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	normal-chr3.GRCh38.cram	tumour-chr3.GRCh38.cram
+chr3:80001-360000	7491	12945896	ATC	A	5	PASS	LOD=19.26;MAPQ=60;NM=0;REPSEQ=CC;SCTG=c_1_1_25001_45C;SPAN=2	GT:AD:DP:GQ:PL:SR:CR:LR:LO	8	10	10	0/0:0:48:12.9:0,12.9,141.9:0:0:13:0	0/1:10:103:5.3:5.3,0,242.9:8:10:-5.105:19.26
+chr3:80001-360000	164861	466025123	GT	G	32	PASS	LOD=33.85;MAPQ=60;NM=0;REPSEQ=TTTTTTT;SCTG=c_1_147001_172001_4C;SPAN=1	GT:AD:DP:GQ:PL:SR:CR:LR:LO	12	23	23	0/0:0:32:8.3:0,8.3,64.3:0:0:8.67:0	0/1:23:77:32.2:32.2,0,85.1:12:23:-32.06:33.85
+chr3:80001-360000	270483	531211880	CTTTTTAGACTACAA	C	37	PASS	LOD=38.25;MAPQ=60;NM=0;REPSEQ=TTATTA;SCTG=c_1_269501_280000_11C;SPAN=14	GT:AD:DP:GQ:PL:SR:CR:LR:LO	13	21	21	0/0:0:34:8.9:0,8.9,78:0:0:9.212:0	0/1:21:64:37.5:37.5,0,76.5:13:21:-37.3:38.25
