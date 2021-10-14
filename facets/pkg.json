@@ -1,6 +1,6 @@
 {
     "name": "facets",
-    "version": "0.4.1",
+    "version": "0.4.1.1",
     "description": "facets tool",
     "main": "main.nf",
     "deprecated": false,
@@ -14,14 +14,14 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
+        "url": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number.git"
     },
     "container": {
         "registries": [
             {
                 "registry": "ghcr.io",
                 "type": "docker",
-                "org": "icgc-argo-structural-variation-cn-wg",
+                "org": "icgc-argo-workflows",
                 "default": true
             }
         ]
@@ -35,6 +35,6 @@
         }
     ],
     "license": "MIT",
-    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
-    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+    "bugReport": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number#readme"
 }

@@ -1,6 +1,6 @@
 {
     "name": "facets-wf",
-    "version": "0.2.0",
+    "version": "0.2.0.1",
     "description": "facets workflow",
     "main": "main.nf",
     "deprecated": false,
@@ -11,7 +11,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
+        "url": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number.git"
     },
     "dependencies": [
         "github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/snp-pileup@0.3.1",
@@ -25,6 +25,6 @@
         }
     ],
     "license": "MIT",
-    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
-    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+    "bugReport": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number#readme"
 }
