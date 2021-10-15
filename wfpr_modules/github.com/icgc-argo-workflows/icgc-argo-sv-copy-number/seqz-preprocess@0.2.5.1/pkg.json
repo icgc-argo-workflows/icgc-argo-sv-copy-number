@@ -1,0 +1,37 @@
+{
+    "name": "seqz-preprocess",
+    "version": "0.2.5.1",
+    "description": "Sequenza preprocessing",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "bioinformatics",
+        "seq",
+        "qc metrics"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-workflows",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "lDesiree",
+            "email": "desiree.schnidrig@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number#readme"
+}
