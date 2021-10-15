@@ -1,6 +1,6 @@
 {
     "name": "manta",
-    "version": "0.2.0",
+    "version": "0.2.0.1",
     "description": "Manta",
     "main": "main.nf",
     "deprecated": false,
@@ -24,7 +24,7 @@
         ]
     },
     "dependencies": [
-	"github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1"
+        "github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1"
     ],
     "devDependencies": [],
     "contributors": [
