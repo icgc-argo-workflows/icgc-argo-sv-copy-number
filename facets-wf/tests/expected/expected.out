@@ -1,0 +1,12 @@
+# Version = 0.6.1 
+# Input = test_T.cram.bc.gz 
+# tumor = test 
+# snp.nbhd = 500 
+# cval = 200 
+# min.nhet = 25 
+# genome = hg19 
+# Purity = NA 
+# Ploidy = 2 
+# dipLogR = 0.001613941 
+# dipt = 
+# loglik = 

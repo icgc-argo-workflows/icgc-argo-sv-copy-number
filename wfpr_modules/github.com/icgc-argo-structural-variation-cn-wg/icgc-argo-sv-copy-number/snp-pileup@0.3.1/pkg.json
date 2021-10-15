@@ -1,0 +1,38 @@
+{
+    "name": "snp-pileup",
+    "version": "0.3.1",
+    "description": "snp-pileup (for facets)",
+    "main": "main.nf",
+    "deprecated": false,
+    "keywords": [
+        "bioinformatics",
+        "cna"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.git"
+    },
+    "container": {
+        "registries": [
+            {
+                "registry": "ghcr.io",
+                "type": "docker",
+                "org": "icgc-argo-structural-variation-cn-wg",
+                "default": true
+            }
+        ]
+    },
+    "dependencies": [
+        "github.com/icgc-argo/data-processing-utility-tools/helper-functions@1.0.1"
+    ],
+    "devDependencies": [],
+    "contributors": [
+        {
+            "name": "Andrej Benjak",
+            "email": "abenjak@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugReport": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number/issues",
+    "homepage": "https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number#readme"
+}

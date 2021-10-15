@@ -26,7 +26,7 @@
 */
 
 nextflow.enable.dsl = 2
-version = '0.2.5'
+version = '0.2.5.1'
 
 // universal params go here, change default value as needed
 params.container = ""
@@ -52,15 +52,15 @@ workflow SequenzaWf {
   take:
     tumor_bam
     normal_bam
-    gcwiggle
     fasta
+    gcwiggle
 
   main:
     seqzPreprocess(
       tumor_bam,
       normal_bam,
-      gcwiggle,
-      fasta
+      fasta,
+      gcwiggle
     )
     
     seqzMain(
@@ -81,7 +81,7 @@ workflow {
   SequenzaWf(
     file(params.tumor_bam),
     file(params.normal_bam),
-    file(params.gcwiggle),
-    file(params.fasta)
+    file(params.fasta),
+    file(params.gcwiggle)
   )
 }

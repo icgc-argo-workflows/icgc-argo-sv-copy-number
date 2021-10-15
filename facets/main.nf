@@ -29,10 +29,10 @@
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.3.0'  // package version
+version = '0.4.1.1'
 
 container = [
-    'ghcr.io': 'ghcr.io/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number.facets'
+    'ghcr.io': 'ghcr.io/icgc-argo-workflows/icgc-argo-sv-copy-number.facets'
 ]
 default_container_registry = 'ghcr.io'
 /********************************************************************/
@@ -45,11 +45,11 @@ params.container = ""
 
 params.cpus = 1
 params.mem = 30  // GB
-params.publish_dir = "facets_outdir"  // set to empty string will disable publishDir
+params.publish_dir = ""  // set to empty string will disable publishDir
 params.help = null
 
 // tool specific parmas go here, add / change as needed
-params.tumor_id       = null
+params.out_prefix     = null
 params.pileup         = null
 params.genome         = 'hg38'
 params.snp_nbhd       = 500
@@ -74,8 +74,8 @@ The typical command for running the pipeline is as follows:
     nextflow run facets/main.nf --pileup <snp-pileup.bc.gz>
 
 Mandatory arguments:
-    --tumor_id      Tumor ID
     --pileup        Pileup file produced by snp-pileup (.bc.gz)
+    --out_prefix    Output prefix
 
 Optional arguments:
     --genome        Genome build (b37, GRCh37, hg19, mm9, mm10, GRCm38, hg38). [${params.genome}]
@@ -94,16 +94,14 @@ Optional arguments:
 
 if (params.help) exit 0, helpMessage()
 
+// Validate inputs
+if(params.out_prefix == null) error "Missing mandatory '--out_prefix' parameter"
+
 log.info ""
-log.info "tumor_id=${params.tumor_id}"
+log.info "pileup=${params.out_prefix}"
 log.info "pileup=${params.pileup}"
 log.info "genome=${params.genome}"
 log.info ""
-
-
-// Validate inputs
-if(params.tumor_id == null) error "Missing mandatory '--tumor_id' parameter"
-if(params.pileup == null) error "Missing mandatory '--pileup' parameter"
 
 
 process facets {
@@ -118,15 +116,16 @@ process facets {
 
 
   output:
-    path "*.Rdata", emit: output_Rdata
-    path "*.out", emit: output_summary
-    path "*.cncf.txt", optional: true, emit: output_cncf
-    path "*.cncf.pdf", optional: true, emit: output_plot
+    path "*.tgz", emit: facets_results
 
 
   shell:
     '''
-        facetsRun.R --seed !{params.seed} --minNDepth !{params.minNDepth} --maxNDepth !{params.maxNDepth} --snp_nbhd !{params.snp_nbhd} --minGC !{params.minGC} --maxGC !{params.maxGC} --cval !{params.cval} --pre_cval !{params.pre_cval} --genome !{params.genome} --min_nhet !{params.min_nhet} --outPrefix !{params.tumor_id} --tumorName !{params.tumor_id} !{pileup}
+        #run facets
+        facetsRun.R --seed !{params.seed} --minNDepth !{params.minNDepth} --maxNDepth !{params.maxNDepth} --snp_nbhd !{params.snp_nbhd} --minGC !{params.minGC} --maxGC !{params.maxGC} --cval !{params.cval} --pre_cval !{params.pre_cval} --genome !{params.genome} --min_nhet !{params.min_nhet} --outPrefix !{params.out_prefix} --tumorName !{params.out_prefix} !{pileup}
+        
+        #fetch results (cncf and plot can be missing from facets results, but if produced both will be available)
+        facetsResults.sh -s !{params.out_prefix}.out $(if [[ -f !{params.out_prefix}.cncf.txt && -f !{params.out_prefix}.cncf.pdf ]]; then echo -c !{params.out_prefix}.cncf.txt -p !{params.out_prefix}.cncf.pdf; fi)
     '''
 }
 

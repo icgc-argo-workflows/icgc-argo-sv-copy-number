@@ -1,7 +1,7 @@
 FROM continuumio/miniconda3:4.9.2
 
 # filled by wfpm
-LABEL org.opencontainers.image.source https://github.com/icgc-argo-structural-variation-cn-wg/icgc-argo-sv-copy-number
+LABEL org.opencontainers.image.source https://github.com/icgc-argo-workflows/icgc-argo-sv-copy-number
 
 # add ps (required by nextflow)
 RUN apt-get --allow-releaseinfo-change update  && \
@@ -17,6 +17,9 @@ RUN /opt/conda/bin/conda install --yes -c bioconda r-facets=0.6.1 snp-pileup=0.6
 RUN mkdir -p /tools
 ENV PATH="/tools:${PATH}"
 COPY facetsRun.R /tools/
+
+# Add results script:
+COPY facetsResults.sh /tools/
 
 ENTRYPOINT ["/usr/bin/env"]
 
