@@ -1,6 +1,6 @@
 {
     "name": "battenberg",
-    "version": "0.2.0.1",
+    "version": "0.2.1",
     "description": "Battenberg subclonal CN profiling",
     "main": "main.nf",
     "deprecated": false,
