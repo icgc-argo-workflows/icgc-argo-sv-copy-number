@@ -46,7 +46,7 @@ REPLICCORRECTPREFIX = paste0(REF_DIR, "/RT_correction_hg38/1000G_RT_")
 IMPUTE_EXE          = "impute2"
 
 # WGS specific static
-ALLELECOUNTER = "alleleCounter.pl"
+ALLELECOUNTER = "alleleCounter"
 PROBLEMLOCI   = paste0(REF_DIR, "/probloci.txt.gz")
 
 PLATFORM_GAMMA        = 1
