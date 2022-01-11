@@ -203,21 +203,35 @@ workflow ArgoSvCnvCalling {
     }
 
     // some tools seem have trouble take CRAM as input, temporary solution here to convert CRAM to BAM
-    cram2bamT(
-      tumour_aln_seq,
-      ref_genome_fa,
-      ref_genome_gz_secondary_files
-    )
+    if (tumour_aln_seq.name.endsWith('.cram')) {
+      cram2bamT(
+        tumour_aln_seq,
+        ref_genome_fa,
+        ref_genome_gz_secondary_files
+      )
+      tumour_aln_bam = cram2bamT.out.output_bam
+      tumour_aln_bai = cram2bamT.out.output_bai
+    } else {
+      tumour_aln_bam = tumour_aln_seq
+      tumour_aln_bai = tumour_aln_seq_idx
+    }
 
-    cram2bamN(
-      normal_aln_seq,
-      ref_genome_fa,
-      ref_genome_gz_secondary_files
-    )
+    if (normal_aln_seq.name.endsWith('.cram')) {
+      cram2bamN(
+        normal_aln_seq,
+        ref_genome_fa,
+        ref_genome_gz_secondary_files
+      )
+      normal_aln_bam = cram2bamN.out.output_bam
+      normal_aln_bai = cram2bamN.out.output_bai
+    } else {
+      normal_aln_bam = normal_aln_seq
+      normal_aln_bai = normal_aln_seq_idx
+    }
 
     seqzPreprocess(
-      cram2bamT.out.output_bam,
-      cram2bamN.out.output_bam,
+      tumour_aln_bam,
+      normal_aln_bam,
       ref_genome_fa,
       gcwiggle
     )
@@ -227,22 +241,23 @@ workflow ArgoSvCnvCalling {
     )
 
     svaba(
-      cram2bamT.out.output_bam,
-      cram2bamN.out.output_bam,
-      cram2bamT.out.output_bai,
-      cram2bamN.out.output_bai,
+      tumour_aln_bam,
+      normal_aln_bam,
+      tumour_aln_bai,
+      normal_aln_bai,
       ref_genome_fa,
       ref_genome_gz_secondary_files,
       dbsnp_file
     )
 
-    battenberg(
-      tumour_aln_seq,
-      tumour_aln_seq_idx,
-      normal_aln_seq,
-      normal_aln_seq_idx,
-      file(params.battenberg_ref_dir)  // shouldn't use folder as input, temp for now
-    )
+// provisioning input as folder does not work across different platforms
+//    battenberg(
+//      tumour_aln_seq,
+//      tumour_aln_seq_idx,
+//      normal_aln_seq,
+//      normal_aln_seq_idx,
+//      file(params.battenberg_ref_dir)  // shouldn't use folder as input, temp for now
+//    )
 
     snpPileup(
       tumour_aln_seq,
@@ -284,9 +299,9 @@ workflow {
       Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))
     ).collect(),
     file(params.tumour_aln_seq),
-    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', 'crai'])).collect(),
+    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', '^bai', 'crai'])).collect(),
     file(params.normal_aln_seq),
-    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', 'crai'])).collect(),
+    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', '^bai', 'crai'])).collect(),
     file(params.gcwiggle),
     file(params.dbsnp_file)
   )

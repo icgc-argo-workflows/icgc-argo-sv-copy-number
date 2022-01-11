@@ -155,9 +155,9 @@ workflow {
       Channel.fromPath(getBwaSecondaryFiles(params.ref_genome_fa))
     ).collect(),
     file(params.tumour_aln_seq),
-    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', 'crai'])).collect(),
+    Channel.fromPath(getSecondaryFiles(params.tumour_aln_seq, ['bai', '^bai', 'crai'])).collect(),
     file(params.normal_aln_seq),
-    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', 'crai'])).collect(),
+    Channel.fromPath(getSecondaryFiles(params.normal_aln_seq, ['bai', '^bai', 'crai'])).collect(),
     file(params.gcwiggle),
     file(params.dbsnp_file),
     file(params.expected_output)
