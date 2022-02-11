@@ -51,6 +51,6 @@ RUN cd /tmp/battenberg_package && \
 
 # Battenberg running script
 COPY run_battenberg.R /usr/local/bin
-RUN chmod a=rx /usr/local/bin/run_battenberg.R
+RUN chmod u+x /usr/local/bin/run_battenberg.R
 
 CMD ["run_battenberg.R"]
