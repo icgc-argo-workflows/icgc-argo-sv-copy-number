@@ -1,0 +1,38 @@
+Package: Battenberg
+Maintainer: Kate Eason <kate.eason@cruk.cam.ac.uk>
+License: GPL-3
+Type: Package
+Title: Battenberg subclonal copy number caller - modified for ICGC-ARGO testing
+Version: 2.2.10.1
+Authors@R: c(person("David", "Wedge", role=c("aut"), email="dw9@sanger.ac.uk"),
+    person("Peter", "Van Loo", role=c("aut")),
+    person("Stefan","Dentro", email="sd11@sanger.ac.uk", role=c("aut", "cre")),
+    person("Maxime","Tarabichi", role = c("aut")),
+    person("Jonas","Demeulemeester", role = c("aut")),
+    person("Kevin", "Dawson", role=c("ctb")),
+    person("Gro", "Nielsen", role="ctb"),
+    person("Jiqiu","Cheng", role="ctb"))
+Description: Estimate subclonal copy number from whole genome sequencing or SNP6 data.
+Depends: 
+  R (>= 2.13.0),
+  stats,
+  utils,
+  graphics,
+  grDevices
+Imports:
+  RColorBrewer,
+  ASCAT (>= 2.5.1),
+  ggplot2,
+  readr,
+  gtools,
+  gridExtra,
+  doParallel,
+  parallel,
+  foreach,
+  splines,
+  VariantAnnotation
+URL: https://github.com/Wedge-Oxford/battenberg
+LazyLoad: yes
+Suggests:
+    testthat
+RoxygenNote: 7.1.1

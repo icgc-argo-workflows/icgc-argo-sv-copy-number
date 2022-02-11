@@ -1,0 +1,3 @@
+Additions to consider
+* Functions to check whether impute2 and other dependencies are available
+* Code to obtain sex from data for WGS

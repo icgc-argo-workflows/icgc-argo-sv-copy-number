@@ -1,6 +1,6 @@
 #!/usr/local/bin/Rscript --vanilla
 
-library(BattenbergHG38)
+library(Battenberg)
 library(optparse)
 
 option_list = list(
@@ -49,6 +49,11 @@ IMPUTE_EXE          = "impute2"
 ALLELECOUNTER = "alleleCounter"
 PROBLEMLOCI   = paste0(REF_DIR, "/probloci.txt.gz")
 
+# Migrating to Beagle5
+BEAGLEJAR = "/usr/local/bin/beagle.28Jun21.220.jar"
+BEAGLEPLINK.template <- paste0(REF_DIR, "/beagle5/plink.CHROMNAME.GRCh38.map")
+BEAGLEREF.template <- paste0(REF_DIR, "/beagle5/CHROMNAME.1kg.phase3.v5a_GRCh38nounref.vcf.gz")
+
 PLATFORM_GAMMA        = 1
 PHASING_GAMMA         = 1
 SEGMENTATION_GAMMA    = 10
@@ -70,40 +75,55 @@ if(TESTING){
   message('**** Testing mode active. Results will not be accurate. ****')
 }
 
-battenberg(tumourname        = TUMOURNAME,
- normalname                  = NORMALNAME,
- tumour_data_file            = TUMOURBAM,
- normal_data_file            = NORMALBAM,
- ismale                      = IS.MALE,
- fasta.file                  = FASTA,
- imputeinfofile              = IMPUTEINFOFILE,
- g1000prefix                 = G1000PREFIX,
- g1000allelesprefix          = G1000PREFIX_AC,
- gccorrectprefix             = GCCORRECTPREFIX,
- repliccorrectprefix         = REPLICCORRECTPREFIX,
- problemloci                 = PROBLEMLOCI,
- data_type                   = "wgs",
- impute_exe                  = IMPUTE_EXE,
- allelecounter_exe           = ALLELECOUNTER,
- nthreads                    = NTHREADS,
- platform_gamma              = PLATFORM_GAMMA,
- phasing_gamma               = PHASING_GAMMA,
- segmentation_gamma          = SEGMENTATION_GAMMA,
- segmentation_kmin           = SEGMENTATIIN_KMIN,
- phasing_kmin                = PHASING_KMIN,
- clonality_dist_metric       = CLONALITY_DIST_METRIC,
- ascat_dist_metric           = ASCAT_DIST_METRIC,
- min_ploidy                  = MIN_PLOIDY,
- max_ploidy                  = MAX_PLOIDY,
- min_rho                     = MIN_RHO,
- min_goodness                = MIN_GOODNESS_OF_FIT,
- uninformative_BAF_threshold = BALANCED_THRESHOLD,
- min_normal_depth            = MIN_NORMAL_DEPTH,
- min_base_qual               = MIN_BASE_QUAL,
- min_map_qual                = MIN_MAP_QUAL,
- calc_seg_baf_option         = CALC_SEG_BAF_OPTION,
- skip_allele_counting        = SKIP_ALLELECOUNTING,
- skip_preprocessing          = SKIP_PREPROCESSING,
- skip_phasing                = SKIP_PHASING,
- prior_breakpoints_file      = PRIOR_BREAKPOINTS_FILE,
- testingKE                   = TESTING)
+battenberg(tumourname         = TUMOURNAME,
+  normalname                  = NORMALNAME,
+  tumour_data_file            = TUMOURBAM,
+  normal_data_file            = NORMALBAM,
+  ismale                      = IS.MALE,
+  #fasta.file                 = FASTA,
+  imputeinfofile              = IMPUTEINFOFILE,
+  g1000prefix                 = G1000PREFIX,
+  g1000allelesprefix          = G1000PREFIX_AC,
+  gccorrectprefix             = GCCORRECTPREFIX,
+  repliccorrectprefix         = REPLICCORRECTPREFIX,
+  problemloci                 = PROBLEMLOCI,
+  data_type                   = "wgs",
+  impute_exe                  = IMPUTE_EXE,
+  allelecounter_exe           = ALLELECOUNTER,
+  nthreads                    = NTHREADS,
+  platform_gamma              = PLATFORM_GAMMA,
+  phasing_gamma               = PHASING_GAMMA,
+  segmentation_gamma          = SEGMENTATION_GAMMA,
+  segmentation_kmin           = SEGMENTATIIN_KMIN,
+  phasing_kmin                = PHASING_KMIN,
+  clonality_dist_metric       = CLONALITY_DIST_METRIC,
+  ascat_dist_metric           = ASCAT_DIST_METRIC,
+  min_ploidy                  = MIN_PLOIDY,
+  max_ploidy                  = MAX_PLOIDY,
+  min_rho                     = MIN_RHO,
+  min_goodness                = MIN_GOODNESS_OF_FIT,
+  uninformative_BAF_threshold = BALANCED_THRESHOLD,
+  min_normal_depth           = MIN_NORMAL_DEPTH,
+  min_base_qual              = MIN_BASE_QUAL,
+  min_map_qual               = MIN_MAP_QUAL,
+  calc_seg_baf_option        = CALC_SEG_BAF_OPTION,
+  skip_allele_counting       = SKIP_ALLELECOUNTING,
+  skip_preprocessing         = SKIP_PREPROCESSING,
+  skip_phasing               = SKIP_PHASING,
+  prior_breakpoints_file     = PRIOR_BREAKPOINTS_FILE,
+  testingKE                  = TESTING,
+  usebeagle                  = TRUE, ##set to TRUE to use beagle
+  beaglejar                  = BEAGLEJAR, ##path
+  beagleref.template         = BEAGLEREF.template, ##pathtemplate
+  beagleplink.template       = BEAGLEPLINK.template, ##pathtemplate
+  beaglemaxmem               = 15,
+  beaglenthreads             = 1,
+  beaglewindow               = 40,
+  beagleoverlap              = 4,
+  snp6_reference_info_file   = NA,
+  apt.probeset.genotype.exe  = "apt-probeset-genotype",
+  apt.probeset.summarize.exe = "apt-probeset-summarize",
+  norm.geno.clust.exe        = "normalize_affy_geno_cluster.pl",
+  birdseed_report_file       = "birdseed.report.txt",
+  heterozygousFilter         = "none",
+  GENOMEBUILD                = "hg38")
