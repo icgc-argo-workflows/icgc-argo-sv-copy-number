@@ -61,7 +61,7 @@ params.output_pattern = "*_subclones.txt"  // output file name pattern
 include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
 process battenberg {
-  //container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
+  container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
   publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
 
   cpus params.cpus
