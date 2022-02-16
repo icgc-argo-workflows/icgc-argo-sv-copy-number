@@ -34,7 +34,7 @@
 /* this block is auto-generated based on info from pkg.json where   */
 /* changes can be made if needed, do NOT modify this block manually */
 nextflow.enable.dsl = 2
-version = '0.2.5.1'
+version = '0.3.0'
 
 container = [
     'ghcr.io': 'ghcr.io/icgc-argo-workflows/icgc-argo-sv-copy-number.seqz-preprocess'
@@ -54,8 +54,8 @@ params.gcwiggle       = ""
 params.fasta           = ""
 params.expected_output = ""
 
+include { getSecondaryFiles } from '../wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 include { seqzPreprocess } from '../main'
-
 
 process file_smart_diff {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -78,17 +78,23 @@ process file_smart_diff {
 workflow checker {
   take:
     tumor_bam
+    tumor_bai
     normal_bam
+    normal_bai
     gcwiggle
     fasta
+    fasta_fai
     expected_output
 
   main:
     seqzPreprocess(
-      tumor_bam,
-      normal_bam,
-      gcwiggle,
-      fasta
+    tumor_bam,
+    tumor_bai,
+    normal_bam,
+    normal_bai,
+    gcwiggle,
+    fasta,
+    fasta_fai
     )
 
     file_smart_diff(
@@ -101,8 +107,11 @@ workflow checker {
 workflow {
   checker(
     file(params.tumor_bam),
+    Channel.fromPath(getSecondaryFiles(params.tumor_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.normal_bam),
+    Channel.fromPath(getSecondaryFiles(params.normal_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.fasta),
+    Channel.fromPath(getSecondaryFiles(params.fasta,['fai']), checkIfExists: true).collect(),
     file(params.gcwiggle),
     file(params.expected_output)
   )
