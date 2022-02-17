@@ -45,7 +45,7 @@ params.container = ""
 
 params.cpus = 1
 params.mem = 1  // GB
-params.publish_dir = ""  // set to empty string will disable publishDir
+params.publish_dir = "outputdir"  // set to empty string will disable publishDir
 
 
 // tool specific parmas go here, add / change as needed
@@ -82,7 +82,7 @@ process seqzPreprocess {
   chromosomes = params.chromosomes.join(' ')
   seqzfiles = params.chromosomes.join(' ').replaceAll("chr", "seqz_chr")
 
-	'''
+  '''
   sequenza-utils bam2seqz --parallel 32 --chromosome !{chromosomes} -n !{normal_bam} -t !{tumor_bam} --fasta !{fasta} -gc !{gcwiggle} -o seqz
   cat !{seqzfiles} | awk '{if (NR!=1 && $1 != "chromosome") {print $0}}' | bgzip > sample.seqz.gz
   tabix -f -s 1 -b 2 -e 2 -S 1 sample.seqz.gz
