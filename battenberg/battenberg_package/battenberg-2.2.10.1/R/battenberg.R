@@ -421,7 +421,8 @@ sampleidx=1
                   siglevel=0.05, 
                   maxdist=0.01, 
                   noperms=1000,
-                  calc_seg_baf_option=calc_seg_baf_option)
+                  calc_seg_baf_option=calc_seg_baf_option,
+                  seed=1)
     
     # If patient is male, get copy number status of ChrX based only on logR segmentation (due to hemizygosity of SNPs)
     #if (ismale){

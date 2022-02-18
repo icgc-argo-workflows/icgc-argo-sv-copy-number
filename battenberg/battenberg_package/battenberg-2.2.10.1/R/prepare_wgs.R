@@ -431,7 +431,8 @@ prepare_wgs = function(chrom_names, tumourbam, normalbam, tumourname, normalname
                   chr_names=chrom_names,
                   g1000file.prefix=g1000prefix,
                   minCounts=min_normal_depth,
-                  samplename=tumourname)
+                  samplename=tumourname,
+                  seed=1)
   # Perform GC correction
   gc.correct.wgs(Tumour_LogR_file=paste(tumourname,"_mutantLogR.tab", sep=""),
                  outfile=paste(tumourname,"_mutantLogR_gcCorrected.tab", sep=""),
