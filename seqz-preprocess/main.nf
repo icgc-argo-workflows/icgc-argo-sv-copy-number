@@ -43,7 +43,7 @@ params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 1
+params.cpus = 1 // set to number of chromosomes to run all chromosomes in parallel
 params.mem = 1  // GB
 params.publish_dir = "outputdir"  // set to empty string will disable publishDir
 
@@ -83,7 +83,7 @@ process seqzPreprocess {
   seqzfiles = params.chromosomes.join(' ').replaceAll("chr", "seqz_chr")
 
   '''
-  sequenza-utils bam2seqz --parallel 32 --chromosome !{chromosomes} -n !{normal_bam} -t !{tumor_bam} --fasta !{fasta} -gc !{gcwiggle} -o seqz
+  sequenza-utils bam2seqz --parallel 25 --chromosome !{chromosomes} -n !{normal_bam} -t !{tumor_bam} --fasta !{fasta} -gc !{gcwiggle} -o seqz
   cat !{seqzfiles} | awk '{if (NR!=1 && $1 != "chromosome") {print $0}}' | bgzip > sample.seqz.gz
   tabix -f -s 1 -b 2 -e 2 -S 1 sample.seqz.gz
   sequenza-utils seqz_binning --seqz sample.seqz.gz --window 50 -o sample_bin50.seqz.gz
