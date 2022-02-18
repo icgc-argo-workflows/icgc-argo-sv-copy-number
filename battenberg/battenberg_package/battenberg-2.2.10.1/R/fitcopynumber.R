@@ -369,7 +369,7 @@ determine_copynumber = function(BAFvals, LogRvals, rho, psi, gamma, ctrans, ctra
   BAFphased = BAFvals[,4]
   BAFseg = BAFvals[,5]
   BAFpos = as.vector(ctrans[as.vector(BAFvals[,1])]*1000000000+BAFvals[,2])
-  LogRpos = as.vector(ctrans.logR[as.vector(LogRvals[,1])]*1000000000+LogRvals[,2])
+  LogRpos = as.vector(ctrans.logR[as.vector(paste0('chr', LogRvals[,1]))]*1000000000+LogRvals[,2])
 
   #DCW 240314
   switchpoints = c(0,which(BAFseg[-1] != BAFseg[-(length(BAFseg))] | BAFvals[-1,1] != BAFvals[-nrow(BAFvals),1]),length(BAFseg))

@@ -377,8 +377,8 @@ battenberg = function(tumourname, normalname, tumour_data_file, normal_data_file
   doParallel::registerDoParallel(clp)
   
   # for (sampleidx in 1:nsamples) {
-  foreach::foreach (sampleidx=1:nsamples) %dopar% {
-
+  #foreach::foreach (sampleidx=1:nsamples) %dopar% {
+sampleidx=1
     print(paste0("Fitting final copy number and calling subclones for sample ", tumourname[sampleidx]))
     
     if (data_type=="wgs" | data_type=="WGS") {
@@ -447,7 +447,7 @@ battenberg = function(tumourname, normalname, tumour_data_file, normal_data_file
                                rho_psi_file=paste(tumourname[sampleidx], "_rho_and_psi.txt", sep=""),
                                gamma_param=platform_gamma)
     
-  }
+  #}
   
   # Kill the threads as last part again is single core
   parallel::stopCluster(clp)
