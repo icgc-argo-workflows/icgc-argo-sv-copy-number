@@ -50,8 +50,9 @@ params.publish_dir = "output_dir/"  // set to empty string will disable publishD
 
 // tool specific parmas go here, add / change as needed
 params.seqz = ""
-params.genome = 'hg38'
-params.output_pattern = "*_*" // output file name pattern are *.pdf|*.txt|*.RData
+params.genome = "hg38"
+params.sampleID = "sample"
+//params.output_pattern = "*_*" // output file name pattern are *.pdf|*.txt|*.RData
 
 
 process seqzMain {
@@ -65,14 +66,35 @@ process seqzMain {
     path seqz
 
   output:  // output, make update as needed
-    path "${params.output_pattern}", emit: results
-    path "*segments.txt", emit: segments
+    path "*.tgz", emit: sequenza_results
+    path "${params.sampleID}_segments.txt", emit: segments
 
   shell:
     // add and initialize variables here as needed
 
     """
-    Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome}
+    # run sequenza
+    Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome} --sampleID !{params.sampleID}
+
+    # fetch results
+    ./tools/maketar.sh \
+    --fit "!{params.sampleID}_alternative_fit.pdf" \
+    --solutions "!{params.sampleID}_alternative_solutions.txt" \
+    --depths "!{params.sampleID}_chromosome_depths.pdf" \
+    --chrview "!{params.sampleID}_chromosome_view.pdf" \
+    --bars "!{params.sampleID}_ N_bars.pdf" \
+    --confints "!{params.sampleID}_confints_CP.txt" \
+    --contours "!{params.sampleID}_CP_contours.pdf" \
+    --contpost "!{params.sampleID}_CP_contours_post_prob_distr.pdf" \
+    --gc "!{params.sampleID}_gc_plots.pdf" \
+    --genomeview "!{params.sampleID}_genome_view.pdf" \
+    --modelfit "!{params.sampleID}_model_fit.pdf" \
+    --mutations "!{params.sampleID}_mutations.txt" \
+    --segments "!{params.sampleID}_segments.txt" \
+    --cptable "!{params.sampleID}_sequenza_cp_table.RData" \
+    --extract "!{params.sampleID}_sequenza_extract.RData" \
+    --log "!{params.sampleID}_sequenza_log.txt" \
+    --session "!{params.sampleID}_sequenza_session.RData"
     """
 }
 

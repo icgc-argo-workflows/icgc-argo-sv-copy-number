@@ -9,9 +9,12 @@ RUN apt-get --allow-releaseinfo-change update \
     && git clone https://github.com/aroneklund/copynumber.git \
     && /opt/conda/bin/R CMD INSTALL copynumber
 
+# add runSequenza.R and main.sh to /tools
+RUN mkdir /tools
+COPY runSequenza.R /tools/
+COPY maketar.sh /tools/
 ENV PATH="/tools:${PATH}"
 
-COPY runSequenza.R /tools/
 
 ENTRYPOINT ["/usr/bin/env"]
 

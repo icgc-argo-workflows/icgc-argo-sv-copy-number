@@ -11,6 +11,8 @@ option_list <- list(
   make_option("--seqz", type="character", default = NULL, 
               help="-", metavar="character"),
   make_option("--genome", type="character", default = NULL, 
+              help="-", metavar="character"),
+  make_option("--sampleID", type="character", default = NULL, 
               help="-", metavar="character")
 )
 
@@ -19,14 +21,13 @@ opt_parser <- OptionParser(option_list = option_list)
 opt        <- parse_args(opt_parser)
 
 # check if mandatory arguments were provided, show help menu otherwise
-if (is.null(opt[["seqz"]]) | is.null(opt[["genome"]])) {
+if (is.null(opt[["seqz"]]) | is.null(opt[["genome"]]) | is.null(opt[["sampleID"]])) {
   print_help(opt_parser)
   print(opt)
   stop("One or more mandatory arguments missing.", call.=FALSE)
 }
 
-sample_id = sub("_bin50.seqz.gz|.seqz.txt.gz", "", opt[["seqz"]])
-
+sampleID <- as.character(opt[["sampleID"]])
 
 # process seqz data, normalization and segmentation
 seqz <- sequenza.extract(opt[["seqz"]], assembly = opt[["genome"]])
@@ -35,14 +36,14 @@ seqz <- sequenza.extract(opt[["seqz"]], assembly = opt[["genome"]])
 CP <- sequenza.fit(seqz)
 
 # write files and plots using suggested or selected solution
-sequenza.results(sequenza.extract = seqz, cp.table = CP, sample.id = sample_id)
+sequenza.results(sequenza.extract = seqz, cp.table = CP, sample.id = sampleID)
 
 
 # This is not in the results by default: Plot of the log posterior probability with respective cellularity and ploidy probability distribution and confidence intervals.
 
 cint <- get.ci(CP)
 
-pdf(paste0(sample_id,"_CP_contours_post_prob_distr.pdf"))
+pdf(paste0(sampleID,"_CP_contours_post_prob_distr.pdf"))
 par(mfrow = c(2,2))
 cp.plot(CP)
 cp.plot.contours(CP, add = TRUE)
@@ -65,4 +66,4 @@ abline(v = cint$max.ploidy, lty = 2, lwd = 0.5)
 dev.off()
 
 # Save R session
-save.image(paste0(sample_id,"_sequenza_session.RData"))
+save.image(paste0(sampleID,"_sequenza_session.RData"))
