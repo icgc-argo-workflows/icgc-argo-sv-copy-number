@@ -82,7 +82,7 @@ process seqzMain {
     --solutions "!{params.sampleID}_alternative_solutions.txt" \
     --depths "!{params.sampleID}_chromosome_depths.pdf" \
     --chrview "!{params.sampleID}_chromosome_view.pdf" \
-    --bars "!{params.sampleID}_N_bars.pdf" \
+    --bars "!{params.sampleID}_CN_bars.pdf" \
     --confints "!{params.sampleID}_confints_CP.txt" \
     --contours "!{params.sampleID}_CP_contours.pdf" \
     --contpost "!{params.sampleID}_CP_contours_post_prob_distr.pdf" \
