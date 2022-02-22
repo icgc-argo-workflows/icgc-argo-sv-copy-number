@@ -66,8 +66,8 @@ process file_smart_diff {
 
   script:
     """
-    #zdiff ${segments} ${expected_file} \
-    #  && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
+    zdiff ${segments} ${expected_file} \
+      && ( echo "Test PASSED" && exit 0 ) || ( echo "Test FAILED, output file mismatch." && exit 1 )
     """
 }
 

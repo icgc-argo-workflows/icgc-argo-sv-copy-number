@@ -77,7 +77,7 @@ process seqzMain {
     Rscript /tools/runSequenza.R --seqz !{seqz} --genome !{params.genome} --sampleID !{params.sampleID}
 
     # fetch results
-    ./tools/maketar.sh \
+    bash /tools/maketar.sh \
     --fit "!{params.sampleID}_alternative_fit.pdf" \
     --solutions "!{params.sampleID}_alternative_solutions.txt" \
     --depths "!{params.sampleID}_chromosome_depths.pdf" \
