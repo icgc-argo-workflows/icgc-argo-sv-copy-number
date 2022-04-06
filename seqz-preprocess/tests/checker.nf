@@ -52,10 +52,12 @@ params.tumor_bam      = ""
 params.normal_bam     = ""
 params.gcwiggle       = ""
 params.fasta           = ""
+params.chromosomes    = ["chr11"]
 params.expected_output = ""
 
 include { getSecondaryFiles } from '../wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 include { seqzPreprocess } from '../main'
+include { seqzPreprocessMerge } from '../main'
 
 process file_smart_diff {
   container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
@@ -81,24 +83,30 @@ workflow checker {
     tumor_bai
     normal_bam
     normal_bai
-    gcwiggle
     fasta
     fasta_fai
+    gcwiggle
+    chrom
     expected_output
 
   main:
     seqzPreprocess(
-    tumor_bam,
-    tumor_bai,
-    normal_bam,
-    normal_bai,
-    gcwiggle,
-    fasta,
-    fasta_fai
+      tumor_bam,
+      tumor_bai,
+      normal_bam,
+      normal_bai,
+      fasta,
+      fasta_fai,
+      gcwiggle,
+      chrom
+    )
+
+    seqzPreprocessMerge(
+      seqzPreprocess.out.seqzperchromosome
     )
 
     file_smart_diff(
-      seqzPreprocess.out.seqz,
+      seqzPreprocessMerge.out.seqz,
       expected_output
     )
 }
@@ -113,6 +121,7 @@ workflow {
     file(params.fasta),
     Channel.fromPath(getSecondaryFiles(params.fasta,['fai']), checkIfExists: true).collect(),
     file(params.gcwiggle),
+    params.chromosomes.flatten(),
     file(params.expected_output)
   )
 }

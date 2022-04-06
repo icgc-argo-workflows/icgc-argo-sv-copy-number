@@ -45,7 +45,7 @@ params.container = ""
 
 params.cpus = 1 // set to number of chromosomes to run all chromosomes in parallel
 params.mem = 1  // GB
-params.publish_dir = "outputdir"  // set to empty string will disable publishDir
+params.publish_dir = ""  // set to empty string will disable publishDir
 
 
 // tool specific parmas go here, add / change as needed
@@ -54,7 +54,7 @@ params.normal_bam     = ""
 params.fasta          = ""
 params.gcwiggle       = "${baseDir}/resources/hg38.gc50Base.wig.gz"
 params.chromosomes    = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"]
-params.output_pattern = "*bin50.seqz.gz"  // output file name pattern
+params.output_pattern = "*.seqz.gz"  // output file name pattern
 
 include { getSecondaryFiles } from './wfpr_modules/github.com/icgc-argo-workflows/data-processing-utility-tools/helper-functions@1.0.1.1/main.nf'
 
@@ -73,18 +73,38 @@ process seqzPreprocess {
     path fasta
     path fasta_fai
     path gcwiggle
+    each chrom
 
   output:  // output, make update as needed
-    path "${params.output_pattern}", emit: seqz
+    path "${params.output_pattern}", emit: seqzperchromosome
   
   shell:
   // add and initialize variables here as needed
-  chromosomes = params.chromosomes.join(' ')
-  seqzfiles = params.chromosomes.join(' ').replaceAll("chr", "seqz_chr")
-
   '''
-  sequenza-utils bam2seqz --parallel 25 --chromosome !{chromosomes} -n !{normal_bam} -t !{tumor_bam} --fasta !{fasta} -gc !{gcwiggle} -o seqz
-  cat !{seqzfiles} | awk '{if (NR!=1 && $1 != "chromosome") {print $0}}' | bgzip > sample.seqz.gz
+  sequenza-utils bam2seqz --chromosome !{chrom} -n !{normal_bam} -t !{tumor_bam} --fasta !{fasta} -gc !{gcwiggle} -o "!{chrom}.seqz.gz"
+  '''
+
+
+}
+
+process seqzPreprocessMerge {
+  container "${params.container ?: container[params.container_registry ?: default_container_registry]}:${params.container_version ?: version}"
+  publishDir "${params.publish_dir}/${task.process.replaceAll(':', '_')}", mode: "copy", enabled: params.publish_dir
+
+  cpus params.cpus
+  memory "${params.mem} GB"
+
+  input:  // input, make update as needed
+    file seqzperchromosome
+
+  output:  // output, make update as needed
+    path "sample_bin50.seqz.gz", emit: seqz
+  
+  shell:
+  // add and initialize variables here as needed
+  seqzfiles = params.chromosomes.join('.seqz.gz ')
+  '''
+  zcat !{seqzfiles}.seqz.gz | awk '{if (NR!=1 && $1 != "chromosome") {print $0}}' | bgzip > sample.seqz.gz
   tabix -f -s 1 -b 2 -e 2 -S 1 sample.seqz.gz
   sequenza-utils seqz_binning --seqz sample.seqz.gz --window 50 -o sample_bin50.seqz.gz
   '''
@@ -103,6 +123,10 @@ workflow {
     Channel.fromPath(getSecondaryFiles(params.normal_bam,['{b,cr}ai']), checkIfExists: true).collect(),
     file(params.fasta),
     Channel.fromPath(getSecondaryFiles(params.fasta,['fai']), checkIfExists: true).collect(),
-    file(params.gcwiggle)
+    file(params.gcwiggle),
+    params.chromosomes.flatten()
+  )
+  seqzPreprocessMerge(
+    seqzPreprocess.out.seqzperchromosome.collect()
   )
 }
