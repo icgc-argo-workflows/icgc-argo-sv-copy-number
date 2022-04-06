@@ -43,7 +43,7 @@ params.container_registry = ""
 params.container_version = ""
 params.container = ""
 
-params.cpus = 1 // set to number of chromosomes to run all chromosomes in parallel
+params.cpus = 1
 params.mem = 1  // GB
 params.publish_dir = ""  // set to empty string will disable publishDir
 
